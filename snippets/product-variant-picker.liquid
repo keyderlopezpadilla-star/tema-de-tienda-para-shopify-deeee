@@ -1,0 +1,42 @@
+{%- comment -%}
+  Variant picker. Renders swatches (radios) per option. product-form.js reads
+  [data-option-selector] + [data-option-position] to resolve the variant.
+  Params: product
+{%- endcomment -%}
+{%- unless product.has_only_default_variant -%}
+  <div class="variant-picker" data-variant-picker>
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_name_down = option.name | downcase
+        assign is_color = false
+        if option_name_down contains 'color' or option_name_down contains 'colour'
+          assign is_color = true
+        endif
+      -%}
+      <fieldset class="variant-option" data-option-index="{{ forloop.index }}">
+        <legend class="variant-option__label">{{ option.name }}: <span data-selected-value>{{ option.selected_value }}</span></legend>
+        <div class="variant-swatches">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign is_selected = false
+              if option.selected_value == value
+                assign is_selected = true
+              endif
+            -%}
+            <label class="swatch {% if is_color %}swatch--color{% endif %}" {% if is_color %}style="background:{{ value | downcase | split: ' ' | last }}"{% endif %} title="{{ value }}">
+              <input
+                type="radio"
+                name="option-{{ option.position }}"
+                value="{{ value | escape }}"
+                data-option-selector
+                data-option-position="{{ option.position }}"
+                {% if is_selected %}checked{% endif %}
+              >
+              {%- unless is_color -%}{{ value }}{%- endunless -%}
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+  </div>
+{%- endunless -%}

@@ -1,0 +1,21 @@
+{%- comment -%}
+  Reusable section heading block.
+  Params: eyebrow, heading, text, alignment (left|center), heading_class, split (bool)
+{%- endcomment -%}
+{%- liquid
+  assign align = alignment | default: 'left'
+  assign h_class = heading_class | default: 'h2'
+-%}
+{%- if eyebrow != blank or heading != blank or text != blank -%}
+  <div
+    class="section-header stack {% if align == 'center' %}text-center{% endif %}"
+    style="--stack:1rem;{% if align == 'center' %}margin-inline:auto;max-width:52rem;{% endif %}"
+    {% if settings.scroll_reveal %}data-reveal{% endif %}
+  >
+    {%- if eyebrow != blank -%}<span class="eyebrow">{{ eyebrow }}</span>{%- endif -%}
+    {%- if heading != blank -%}
+      <h2 class="{{ h_class }}" {% if split %}data-split{% endif %}>{{ heading }}</h2>
+    {%- endif -%}
+    {%- if text != blank -%}<div class="lead {% if align == 'center' %}text-center{% endif %}" {% if align == 'center' %}style="margin-inline:auto"{% endif %}>{{ text }}</div>{%- endif -%}
+  </div>
+{%- endif -%}

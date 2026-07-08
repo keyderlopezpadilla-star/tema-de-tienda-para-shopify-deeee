@@ -1,0 +1,193 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "DEEE TODO",
+    "theme_version": "1.0.0",
+    "theme_author": "DEEE TODO",
+    "theme_documentation_url": "https://github.com/keyderlopezpadilla-star/tema-de-tienda-para-shopify-deeee",
+    "theme_support_url": "https://deeetodo.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Base" },
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#0b0c10" },
+      { "type": "color", "id": "color_surface", "label": "Surface / cards", "default": "#161b22" },
+      { "type": "color", "id": "color_surface_2", "label": "Surface elevated", "default": "#1f2833" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#ededed" },
+      { "type": "color", "id": "color_text_muted", "label": "Text muted", "default": "#99a1af" },
+      { "type": "header", "content": "Brand & neon accents" },
+      { "type": "color", "id": "color_brand", "label": "Primary accent", "default": "#fb2c36" },
+      { "type": "color", "id": "color_brand_soft", "label": "Primary soft", "default": "#ff6568" },
+      { "type": "color", "id": "color_neon_cyan", "label": "Neon cyan", "default": "#00f0ff" },
+      { "type": "color", "id": "color_neon_pink", "label": "Neon pink", "default": "#ff007a" },
+      { "type": "color", "id": "color_neon_purple", "label": "Neon purple", "default": "#b300ff" },
+      { "type": "color", "id": "color_neon_green", "label": "Neon green", "default": "#00c758" },
+      { "type": "color", "id": "color_neon_gold", "label": "Neon gold", "default": "#edb200" },
+      { "type": "header", "content": "Gradients" },
+      {
+        "type": "color_background",
+        "id": "gradient_brand",
+        "label": "Brand gradient",
+        "default": "linear-gradient(120deg, #fb2c36 0%, #ff007a 50%, #b300ff 100%)"
+      },
+      {
+        "type": "color_background",
+        "id": "gradient_neon",
+        "label": "Neon gradient",
+        "default": "linear-gradient(120deg, #00f0ff 0%, #3080ff 50%, #b300ff 100%)"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "assistant_n7"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "range",
+        "id": "type_scale",
+        "label": "Type scale",
+        "min": 90,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      },
+      { "type": "checkbox", "id": "use_geist_cdn", "label": "Load Geist font (matches deeetodo.com)", "default": true },
+      { "type": "range", "id": "heading_weight", "label": "Heading weight", "min": 500, "max": 900, "step": 100, "default": 700 }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      { "type": "range", "id": "page_width", "label": "Page width", "min": 1000, "max": 1600, "step": 40, "unit": "px", "default": 1280 },
+      { "type": "range", "id": "section_spacing", "label": "Section spacing", "min": 40, "max": 160, "step": 8, "unit": "px", "default": 96 },
+      {
+        "type": "select",
+        "id": "corner_radius",
+        "label": "Corner style",
+        "options": [
+          { "value": "sharp", "label": "Sharp" },
+          { "value": "soft", "label": "Soft" },
+          { "value": "round", "label": "Round" }
+        ],
+        "default": "soft"
+      }
+    ]
+  },
+  {
+    "name": "Buttons & cards",
+    "settings": [
+      { "type": "checkbox", "id": "magnetic_buttons", "label": "Magnetic button effect", "default": true },
+      { "type": "checkbox", "id": "card_glow", "label": "Neon glow on card hover", "default": true },
+      { "type": "checkbox", "id": "glassmorphism", "label": "Enable glassmorphism", "default": true }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      { "type": "paragraph", "content": "Motion always respects the visitor's reduced-motion preference." },
+      { "type": "checkbox", "id": "animations_enabled", "label": "Enable animations", "default": true },
+      { "type": "checkbox", "id": "smooth_scroll", "label": "Smooth scrolling (Lenis)", "default": true },
+      { "type": "checkbox", "id": "enable_3d_hero", "label": "Enable 3D hero (Three.js)", "default": true },
+      { "type": "checkbox", "id": "scroll_reveal", "label": "Reveal sections on scroll", "default": true },
+      {
+        "type": "range",
+        "id": "motion_intensity",
+        "label": "Motion intensity",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Product grid",
+    "settings": [
+      { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+      { "type": "checkbox", "id": "show_second_image", "label": "Show 2nd image on hover", "default": true },
+      { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add", "default": true },
+      { "type": "checkbox", "id": "show_rating", "label": "Show product rating", "default": true },
+      {
+        "type": "select",
+        "id": "product_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          { "value": "portrait", "label": "Portrait" },
+          { "value": "square", "label": "Square" },
+          { "value": "landscape", "label": "Landscape" }
+        ],
+        "default": "portrait"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "page", "label": "Page" }
+        ],
+        "default": "drawer"
+      },
+      { "type": "checkbox", "id": "enable_free_shipping_bar", "label": "Free shipping progress bar", "default": true },
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "In your store currency's main unit (e.g. 50 = 50€).",
+        "min": 0,
+        "max": 300,
+        "step": 5,
+        "unit": "$",
+        "default": 50
+      },
+      { "type": "checkbox", "id": "enable_cart_recommendations", "label": "Show cart cross-sell", "default": true }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      { "type": "checkbox", "id": "predictive_search_enabled", "label": "Enable predictive search", "default": true },
+      { "type": "checkbox", "id": "predictive_show_price", "label": "Show price in suggestions", "default": true }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" },
+      { "type": "text", "id": "social_x", "label": "X (Twitter) URL" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube URL" },
+      { "type": "text", "id": "social_whatsapp", "label": "WhatsApp URL" }
+    ]
+  },
+  {
+    "name": "Brand & SEO",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo" },
+      { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 220, "step": 10, "unit": "px", "default": 130 },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon" },
+      { "type": "image_picker", "id": "social_share_image", "label": "Default social share image" },
+      { "type": "text", "id": "brand_tagline", "label": "Brand tagline", "default": "Tu fábrica de ideas" }
+    ]
+  }
+]

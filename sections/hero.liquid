@@ -1,0 +1,174 @@
+{%- comment -%} DEEE TODO — Immersive hero with 3D scene, split-text & magnetic CTAs. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign height_map = 'min(92vh, 900px)'
+  if s.height == 'medium'
+    assign height_map = 'min(70vh, 720px)'
+  elsif s.height == 'full'
+    assign height_map = '100vh'
+  endif
+-%}
+<section
+  class="hero-section overflow-clip relative"
+  style="min-height: {{ height_map }}; display:grid; align-items:center; padding-block: clamp(6rem, 12vh, 10rem)"
+  data-parallax-scope
+  data-accent-shift="{{ s.accent_color }}"
+>
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__blob ambient__blob--1"></div>
+    <div class="ambient__blob ambient__blob--2"></div>
+    <div class="ambient__blob ambient__blob--3"></div>
+  </div>
+
+  {%- if s.enable_3d and settings.enable_3d_hero -%}
+    <div class="hero-3d" aria-hidden="true" style="position:absolute; inset:0; z-index:0">
+      <canvas
+        data-three-scene
+        data-shape="{{ s.shape }}"
+        data-mobile="{{ s.enable_3d_mobile }}"
+        data-color-brand="{{ settings.color_brand }}"
+        data-color-cyan="{{ settings.color_neon_cyan }}"
+        data-color-purple="{{ settings.color_neon_purple }}"
+        style="width:100%;height:100%"
+      ></canvas>
+    </div>
+  {%- endif -%}
+
+  {%- if s.background_image != blank -%}
+    <div class="hero-bg" data-parallax="0.2" style="position:absolute; inset:-10% 0; z-index:0; opacity:{{ s.image_opacity | divided_by: 100.0 }}">
+      {% render 'responsive-image', image: s.background_image, ratio: 'natural', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'ratio-wide' %}
+    </div>
+    <div style="position:absolute;inset:0;z-index:0;background:linear-gradient(180deg, rgba(var(--color-bg-rgb),.4), rgba(var(--color-bg-rgb),.9))"></div>
+  {%- endif -%}
+
+  <div class="container z-1" style="text-align:{{ s.alignment }}">
+    <div class="stack" style="--stack:1.75rem; max-width: {% if s.alignment == 'center' %}56rem; margin-inline:auto{% else %}44rem{% endif %}">
+      {%- if s.eyebrow != blank -%}
+        <span class="eyebrow" data-reveal>{{ s.eyebrow }}</span>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}
+        <h1 class="display" data-split>{{ s.heading }}</h1>
+      {%- endif -%}
+
+      {%- if s.subheading != blank -%}
+        <p class="lead" data-reveal style="{% if s.alignment == 'center' %}margin-inline:auto{% endif %}">{{ s.subheading }}</p>
+      {%- endif -%}
+
+      {%- if s.button_label != blank or s.button_label_2 != blank -%}
+        <div class="cluster" data-reveal style="{% if s.alignment == 'center' %}justify-content:center{% endif %};--gap:.85rem">
+          {%- if s.button_label != blank -%}
+            <a class="btn btn--primary btn--lg" href="{{ s.button_link | default: routes.all_products_collection_url }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+              <span class="btn__label">{{ s.button_label }} {% render 'icon', name: 'arrow-right' %}</span>
+            </a>
+          {%- endif -%}
+          {%- if s.button_label_2 != blank -%}
+            <a class="btn btn--ghost btn--lg" href="{{ s.button_link_2 }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+              <span class="btn__label">{{ s.button_label_2 }}</span>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.show_stats -%}
+        <div class="cluster" style="{% if s.alignment == 'center' %}justify-content:center{% endif %};--gap:2.5rem;margin-top:1rem" data-reveal>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'stat' -%}
+              <div class="stat" {{ block.shopify_attributes }}>
+                <div class="h2 text-gradient" data-count-to="{{ block.settings.value | replace: '+', '' | replace: ',', '' | replace: 'k', '000' | replace: 'K', '000' }}" data-count-suffix="{{ block.settings.suffix }}">{{ block.settings.value }}</div>
+                <div class="text-muted mono" style="font-size:.85rem">{{ block.settings.label }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if s.show_scroll_hint -%}
+    <div class="scroll-hint" aria-hidden="true" style="position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--color-text-faint)">
+      <span class="mono" style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase">Scroll</span>
+      <span style="width:1px;height:36px;background:linear-gradient(var(--color-text-faint),transparent);animation:pulse-glow 2s infinite"></span>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Tu fábrica de ideas" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Si lo puedes imaginar, lo imprimimos." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Fotocopias de toda la vida, impresiones que enamoran y regalos que sacan sonrisas. Ven con tu idea y le ponemos el resto. ✌️" },
+    { "type": "text", "id": "button_label", "label": "Primary button", "default": "Explorar la tienda" },
+    { "type": "url", "id": "button_link", "label": "Primary link" },
+    { "type": "text", "id": "button_label_2", "label": "Secondary button", "default": "Diseña tu producto" },
+    { "type": "url", "id": "button_link_2", "label": "Secondary link" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "full", "label": "Full screen" }
+      ],
+      "default": "large"
+    },
+    { "type": "header", "content": "3D scene" },
+    { "type": "checkbox", "id": "enable_3d", "label": "Enable 3D scene", "default": true },
+    { "type": "checkbox", "id": "enable_3d_mobile", "label": "Enable 3D on mobile", "default": false },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "3D shape",
+      "options": [
+        { "value": "icosahedron", "label": "Crystal" },
+        { "value": "torus", "label": "Torus knot" },
+        { "value": "box", "label": "Cube" },
+        { "value": "sphere", "label": "Sphere" }
+      ],
+      "default": "icosahedron"
+    },
+    { "type": "color", "id": "accent_color", "label": "Ambient accent", "default": "#fb2c36" },
+    { "type": "header", "content": "Background image (optional)" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "range", "id": "image_opacity", "label": "Image opacity", "min": 10, "max": 100, "step": 5, "unit": "%", "default": 60 },
+    { "type": "header", "content": "Extras" },
+    { "type": "checkbox", "id": "show_stats", "label": "Show stats row", "default": true },
+    { "type": "checkbox", "id": "show_scroll_hint", "label": "Show scroll hint", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "1000+" },
+        { "type": "text", "id": "suffix", "label": "Suffix", "default": "" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Vecinos contentos" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "1000", "suffix": "+", "label": "Vecinos contentos" } },
+        { "type": "stat", "settings": { "value": "15", "suffix": "+", "label": "Años de experiencia" } },
+        { "type": "stat", "settings": { "value": "24", "suffix": "h", "label": "Para los que van con prisas" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index", "page"] }
+}
+{% endschema %}

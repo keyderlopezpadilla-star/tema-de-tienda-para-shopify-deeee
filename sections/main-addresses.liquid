@@ -1,0 +1,53 @@
+{%- comment -%} DEEE TODO — Customer addresses management. {%- endcomment -%}
+<section class="section">
+  <div class="container" style="max-width:44rem">
+    <a href="{{ routes.account_url }}" class="mono text-muted link-underline" style="font-size:.82rem">← {{ 'customer.account.title' | t }}</a>
+    <h1 class="h1" style="margin:1rem 0 2rem" data-split>{{ 'customer.account.addresses' | t }}</h1>
+
+    <div class="card" style="padding:1.75rem;margin-bottom:2rem">
+      <h2 class="h3" style="margin-bottom:1rem">Nueva dirección</h2>
+      {%- form 'customer_address', customer.new_address, class: 'stack', style: 'display:grid;gap:1rem' -%}
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:1rem">
+          <input class="input" name="address[first_name]" placeholder="Nombre" value="{{ form.first_name }}">
+          <input class="input" name="address[last_name]" placeholder="Apellidos" value="{{ form.last_name }}">
+        </div>
+        <input class="input" name="address[address1]" placeholder="Dirección" value="{{ form.address1 }}">
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:1rem">
+          <input class="input" name="address[city]" placeholder="Ciudad" value="{{ form.city }}">
+          <input class="input" name="address[zip]" placeholder="Código postal" value="{{ form.zip }}">
+        </div>
+        <input class="input" name="address[phone]" placeholder="Teléfono" value="{{ form.phone }}">
+        <button class="btn btn--primary" type="submit"><span class="btn__label">Guardar dirección</span></button>
+      {%- endform -%}
+    </div>
+
+    {%- for address in customer.addresses -%}
+      <div class="card" style="padding:1.5rem;margin-bottom:1rem">
+        <div class="rte text-muted">{{ address | format_address }}</div>
+        <div class="cluster" style="--gap:.75rem;margin-top:1rem">
+          {%- if address == customer.default_address -%}<span class="badge badge--neon">Predeterminada</span>{%- endif -%}
+          <a class="link-underline" href="{{ address.url }}" data-address-edit="{{ address.id }}">Editar</a>
+          <a class="cart-remove" href="{{ address.url }}" data-address-delete data-confirm="¿Eliminar esta dirección?">Eliminar</a>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-address-delete]').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (confirm(el.dataset.confirm)) {
+        var f = document.createElement('form');
+        f.method = 'post'; f.action = el.getAttribute('href');
+        f.innerHTML = '<input type="hidden" name="_method" value="delete">';
+        document.body.appendChild(f); f.submit();
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{ "name": "Addresses", "settings": [] }
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- comment -%} DEEE TODO — Customer login + recover password. {%- endcomment -%}
+<section class="section">
+  <div class="container" style="max-width:32rem">
+    <div id="RecoverPassword" style="display:none">
+      <h1 class="h2" style="margin-bottom:1rem" data-split>{{ 'customer.login.forgot' | t }}</h1>
+      {%- form 'recover_customer_password', class: 'card stack' -%}
+        <div style="padding:1.75rem;display:grid;gap:1rem">
+          {%- if form.posted_successfully? -%}<p class="form-status form-status--success">✔</p>{%- endif -%}
+          <div class="field">
+            <label class="field__label" for="RecoverEmail">{{ 'customer.login.email' | t }}</label>
+            <input class="input" type="email" id="RecoverEmail" name="email" autocomplete="email" required>
+          </div>
+          <button class="btn btn--primary btn--full" type="submit"><span class="btn__label">{{ 'customer.login.submit' | t }}</span></button>
+          <button type="button" class="link-underline mono" style="font-size:.85rem" data-recover-hide>← {{ 'customer.login.title' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    <div id="CustomerLogin">
+      <h1 class="h1" style="margin-bottom:1.5rem" data-split>{{ 'customer.login.title' | t }}</h1>
+      {%- form 'customer_login', class: 'card' -%}
+        <div style="padding:1.75rem;display:grid;gap:1rem">
+          {%- if form.errors -%}<p class="form-status form-status--error">{{ form.errors | default_errors }}</p>{%- endif -%}
+          <div class="field">
+            <label class="field__label" for="LoginEmail">{{ 'customer.login.email' | t }}</label>
+            <input class="input" type="email" id="LoginEmail" name="customer[email]" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="LoginPassword">{{ 'customer.login.password' | t }}</label>
+            <input class="input" type="password" id="LoginPassword" name="customer[password]" autocomplete="current-password" required>
+          </div>
+          <button class="btn btn--primary btn--full btn--lg" type="submit"><span class="btn__label">{{ 'customer.login.submit' | t }}</span></button>
+          <div class="cluster" style="justify-content:space-between">
+            <button type="button" class="link-underline mono" style="font-size:.85rem" data-recover-show>{{ 'customer.login.forgot' | t }}</button>
+            <a class="link-underline mono" style="font-size:.85rem;color:var(--color-neon-cyan)" href="{{ routes.account_register_url }}">{{ 'customer.login.create' | t }}</a>
+          </div>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var login = document.getElementById('CustomerLogin');
+    var recover = document.getElementById('RecoverPassword');
+    document.querySelectorAll('[data-recover-show]').forEach(function (b) {
+      b.addEventListener('click', function () { login.style.display = 'none'; recover.style.display = 'block'; });
+    });
+    document.querySelectorAll('[data-recover-hide]').forEach(function (b) {
+      b.addEventListener('click', function () { login.style.display = 'block'; recover.style.display = 'none'; });
+    });
+    if (window.location.hash === '#recover') { login.style.display = 'none'; recover.style.display = 'block'; }
+  })();
+</script>
+
+{% schema %}
+{ "name": "Login", "settings": [] }
+{% endschema %}

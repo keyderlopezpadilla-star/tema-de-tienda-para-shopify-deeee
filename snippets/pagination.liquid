@@ -1,0 +1,32 @@
+{%- comment -%}
+  Accessible pagination. Params: paginate
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination cluster" style="justify-content:center;--gap:.4rem;margin-top:2.5rem" role="navigation" aria-label="Pagination">
+    {%- if paginate.previous -%}
+      <a class="btn btn--ghost btn--sm" href="{{ paginate.previous.url }}" data-facet-link rel="prev">
+        <span class="btn__label">← {{ 'general.pagination.previous' | t }}</span>
+      </a>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a class="btn btn--ghost btn--sm" href="{{ part.url }}" data-facet-link aria-label="Page {{ part.title }}">
+          <span class="btn__label">{{ part.title }}</span>
+        </a>
+      {%- else -%}
+        {%- if part.title == paginate.current_page -%}
+          <span class="btn btn--sm" aria-current="page">{{ part.title }}</span>
+        {%- else -%}
+          <span class="btn btn--sm" style="opacity:.5">{{ part.title }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next -%}
+      <a class="btn btn--ghost btn--sm" href="{{ paginate.next.url }}" data-facet-link rel="next">
+        <span class="btn__label">{{ 'general.pagination.next' | t }} →</span>
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

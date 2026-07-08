@@ -1,0 +1,160 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "value": "1000", "suffix": "+", "label": "Vecinos contentos" } },
+        "s2": { "type": "stat", "settings": { "value": "15", "suffix": "+", "label": "Años de experiencia" } },
+        "s3": { "type": "stat", "settings": { "value": "24", "suffix": "h", "label": "Para los que van con prisas" } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {
+        "eyebrow": "Tu fábrica de ideas",
+        "heading": "Si lo puedes imaginar, lo imprimimos.",
+        "subheading": "Fotocopias de toda la vida, impresiones que enamoran y regalos que sacan sonrisas. Ven con tu idea y le ponemos el resto. ✌️",
+        "button_label": "Explorar la tienda",
+        "button_label_2": "Diseña tu producto",
+        "alignment": "center",
+        "height": "large",
+        "enable_3d": true,
+        "shape": "icosahedron",
+        "accent_color": "#fb2c36",
+        "show_stats": true,
+        "show_scroll_hint": true
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "m1": { "type": "phrase", "settings": { "text": "¿Una copia urgente? Corre, que te esperamos 🏃" } },
+        "m2": { "type": "phrase", "settings": { "text": "Plastificamos hasta tus recuerdos 📸" } },
+        "m3": { "type": "phrase", "settings": { "text": "Tu TFG encuadernado y reluciente 🎓" } },
+        "m4": { "type": "phrase", "settings": { "text": "Carteles que se ven desde la luna 🌙" } },
+        "m5": { "type": "phrase", "settings": { "text": "Camisetas con tu cara (sí, en serio) 👕" } },
+        "m6": { "type": "phrase", "settings": { "text": "Pegatinas para todo lo pegable 🏷️" } },
+        "m7": { "type": "phrase", "settings": { "text": "Imprimimos tus memes favoritos 😎" } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4", "m5", "m6", "m7"],
+      "settings": { "speed": 34, "gradient_text": false, "padding": 28 }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "La copistería de siempre",
+        "heading": "Con un puntito gamberro",
+        "text": "<p>Que no te engañe el rollo futurista: seguimos siendo esa copistería de barrio donde entras con un pendrive y sales con todo resuelto. Solo que ahora también lo diseñas desde el sofá.</p>",
+        "button_label": "Envía o ajusta tu copia",
+        "badge": "Hecho en Algemesí",
+        "layout": "image_first",
+        "accent": "#fb2c36"
+      }
+    },
+    "services": {
+      "type": "services-grid",
+      "blocks": {
+        "svc1": { "type": "service", "settings": { "emoji": "🖨️", "title": "Impresión DTF", "description": "Impresión directa sobre textil de última generación. Colores vibrantes y durabilidad excepcional." } },
+        "svc2": { "type": "service", "settings": { "emoji": "✨", "title": "Impresión UV", "description": "Sobre cualquier superficie: madera, metal, cristal, plástico. Resistente a UV y agua." } },
+        "svc3": { "type": "service", "settings": { "emoji": "🎨", "title": "Sublimación", "description": "Personalización de textiles, tazas, cojines y más. Colores vivos que no se desgastan." } },
+        "svc4": { "type": "service", "settings": { "emoji": "📣", "title": "Cartelería", "description": "Carteles, banners y vinilos de gran formato. Perfectos para eventos y tiendas." } },
+        "svc5": { "type": "service", "settings": { "emoji": "🚗", "title": "Vinilos", "description": "Vinilos decorativos, rotulación de vehículos y escaparates de alta calidad." } },
+        "svc6": { "type": "service", "settings": { "emoji": "🎁", "title": "Regalos personalizados", "description": "Crea regalos únicos y memorables. Tazas, camisetas, cojines, calendarios y más." } }
+      },
+      "block_order": ["svc1", "svc2", "svc3", "svc4", "svc5", "svc6"],
+      "settings": {
+        "eyebrow": "Nuestros servicios",
+        "heading": "No somos una copistería más, somos tu fábrica de ideas",
+        "subheading": "Tecnología de última generación y años de experiencia al servicio de tu creatividad.",
+        "header_alignment": "center",
+        "button_label": "Solicitar presupuesto gratis",
+        "accent": "#b300ff"
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Tienda virtual",
+        "heading": "Tu tienda online 24/7",
+        "subheading": "Compra desde casa y recibe tu pedido personalizado en 24-48 horas.",
+        "products_to_show": 8,
+        "columns": "4",
+        "show_view_all": true,
+        "accent": "#00f0ff"
+      }
+    },
+    "stats": {
+      "type": "stats",
+      "blocks": {
+        "st1": { "type": "stat", "settings": { "value": "15", "suffix": "+", "label": "Años de experiencia" } },
+        "st2": { "type": "stat", "settings": { "value": "10000", "suffix": "+", "label": "Proyectos completados", "neon": true } },
+        "st3": { "type": "stat", "settings": { "value": "99", "suffix": "%", "label": "Satisfacción del cliente" } }
+      },
+      "block_order": ["st1", "st2", "st3"],
+      "settings": {
+        "eyebrow": "¿Por qué DEEE TODO?",
+        "heading": "Tecnología, experiencia y pasión",
+        "subheading": "Combinamos lo mejor para ofrecerte el mejor servicio de impresión y personalización.",
+        "accent": "#00c758"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "t1": { "type": "testimonial", "settings": { "quote": "Entré con un pendrive perdido y salí con todo resuelto. ¡Son unos cracks!", "author": "María G.", "role": "Cliente de Algemesí", "rating": 5 } },
+        "t2": { "type": "testimonial", "settings": { "quote": "Mi TFG quedó espectacular y en tiempo récord. Repetiré seguro.", "author": "Jordi P.", "role": "Estudiante", "rating": 5 } },
+        "t3": { "type": "testimonial", "settings": { "quote": "Las camisetas personalizadas para el equipo fueron un éxito total.", "author": "Laura V.", "role": "Club deportivo", "rating": 5 } }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": {
+        "eyebrow": "Lo que dicen",
+        "heading": "Miles de vecinos ya confían en nosotros",
+        "accent": "#edb200"
+      }
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "f1": { "type": "item", "settings": { "question": "¿En cuánto tiempo recibo mi pedido?", "answer": "<p>La mayoría de pedidos están listos en 24-48h. El envío express llega a toda España en 24-48h con seguimiento.</p>" } },
+        "f2": { "type": "item", "settings": { "question": "¿Puedo subir mi propio diseño?", "answer": "<p>¡Claro! Sube tu archivo o cuéntanos tu idea y nosotros ponemos la tinta, el papel y las ganas.</p>" } },
+        "f3": { "type": "item", "settings": { "question": "¿Qué materiales usáis?", "answer": "<p>Materiales premium y tecnología de última generación en todos nuestros servicios.</p>" } }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": { "eyebrow": "FAQ", "heading": "Preguntas frecuentes", "open_first": true, "accent": "#00f0ff" }
+    },
+    "contact": {
+      "type": "contact",
+      "blocks": {
+        "i1": { "type": "info", "settings": { "icon": "sparkles", "title": "Dirección", "text": "Carrer de la Muntanya, 11 · 46680 Algemesí, Valencia" } },
+        "i2": { "type": "info", "settings": { "icon": "shield", "title": "Horario", "text": "L–V 9:30–14:00 · 17:00–20:00 · Sábado 9:30–14:00" } },
+        "i3": { "type": "info", "settings": { "icon": "truck", "title": "Envíos", "text": "Express 24-48h a toda España con seguimiento" } }
+      },
+      "block_order": ["i1", "i2", "i3"],
+      "settings": {
+        "eyebrow": "Hablemos",
+        "heading": "Hablemos de tu proyecto",
+        "subheading": "Estamos aquí para ayudarte. Visítanos, llámanos o envíanos un mensaje.",
+        "accent": "#3080ff"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Newsletter",
+        "heading": "Únete a la fábrica de ideas",
+        "text": "Novedades, ofertas y un poquito de rollo gamberro en tu correo.",
+        "accent": "#b300ff"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "marquee",
+    "image-with-text",
+    "services",
+    "featured-collection",
+    "stats",
+    "testimonials",
+    "faq",
+    "contact",
+    "newsletter"
+  ]
+}

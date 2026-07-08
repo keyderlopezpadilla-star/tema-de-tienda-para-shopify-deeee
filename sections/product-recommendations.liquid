@@ -1,0 +1,57 @@
+{%- comment -%} DEEE TODO — Related products via Shopify Recommendations API. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <section class="section">
+    <div class="container">
+      {% render 'section-header', eyebrow: s.eyebrow, heading: s.heading, alignment: 'left', split: true %}
+      <div class="product-grid product-grid--{{ s.columns }}" style="margin-top:2rem">
+        {%- for product in recommendations.products limit: s.products_to_show -%}
+          {% render 'product-card', product: product, reveal: settings.scroll_reveal %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- elsif recommendations.performed == false -%}
+  {%- comment -%} Placeholder shell fetched & replaced by JS. {%- endcomment -%}
+  <section
+    class="section"
+    data-product-recommendations
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ s.products_to_show }}"
+  >
+    <div class="container"><div class="product-grid product-grid--{{ s.columns }}" aria-hidden="true"></div></div>
+    <script>
+      (function () {
+        var el = document.currentScript.closest('[data-product-recommendations]');
+        if (!el) return;
+        fetch(el.dataset.url)
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var fresh = doc.querySelector('.section');
+            if (fresh) el.replaceWith(fresh);
+          })
+          .catch(function () { el.remove(); });
+      })();
+    </script>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "También te puede gustar" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Combina y crea" },
+    { "type": "range", "id": "products_to_show", "label": "Products", "min": 2, "max": 10, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

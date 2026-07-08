@@ -1,0 +1,16 @@
+{%- comment -%}
+  Star rating from the standard product.metafields.reviews.rating metaobject.
+  Gracefully renders nothing if no rating metafield exists.
+  Params: product
+{%- endcomment -%}
+{%- liquid
+  assign rating = product.metafields.reviews.rating.value
+  assign count = product.metafields.reviews.rating_count.value
+-%}
+{%- if rating != blank and settings.show_rating -%}
+  {%- assign pct = rating.rating | divided_by: rating.scale_max | times: 100 -%}
+  <span class="rating" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating.rating, rating_max: rating.scale_max }}">
+    <span class="rating__stars" style="--pct: {{ pct }}%" role="img"></span>
+    {%- if count != blank -%}<span class="rating__count">({{ count }})</span>{%- endif -%}
+  </span>
+{%- endif -%}

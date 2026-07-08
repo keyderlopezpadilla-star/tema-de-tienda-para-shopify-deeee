@@ -1,0 +1,60 @@
+{%- comment -%} DEEE TODO — Customer account dashboard. {%- endcomment -%}
+<section class="section">
+  <div class="container">
+    <div class="cluster" style="justify-content:space-between;margin-bottom:2rem">
+      <h1 class="h1" data-split>{{ 'customer.account.title' | t }}</h1>
+      <a class="btn btn--ghost" href="{{ routes.account_logout_url }}"><span class="btn__label">{{ 'customer.account.logout' | t }}</span></a>
+    </div>
+
+    <div class="grid" style="grid-template-columns:1fr;gap:1.5rem">
+      <div class="card" style="padding:1.5rem">
+        <h2 class="h3" style="margin-bottom:1rem">{{ 'customer.account.orders' | t }}</h2>
+        {%- paginate customer.orders by 10 -%}
+          {%- if customer.orders.size > 0 -%}
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:.9rem">
+                <thead>
+                  <tr class="text-muted mono" style="text-align:left;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase">
+                    <th style="padding:.75rem 1rem .75rem 0">#</th>
+                    <th style="padding:.75rem 1rem">{{ 'customer.orders.date' | t }}</th>
+                    <th style="padding:.75rem 1rem">{{ 'customer.orders.payment_status' | t }}</th>
+                    <th style="padding:.75rem 1rem">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                    <th style="padding:.75rem 0 .75rem 1rem;text-align:right">{{ 'customer.orders.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for order in customer.orders -%}
+                    <tr style="border-top:1px solid var(--color-line)">
+                      <td style="padding:.85rem 1rem .85rem 0"><a class="link-underline" href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                      <td style="padding:.85rem 1rem" class="text-muted">{{ order.created_at | date: '%d/%m/%Y' }}</td>
+                      <td style="padding:.85rem 1rem">{{ order.financial_status_label }}</td>
+                      <td style="padding:.85rem 1rem">{{ order.fulfillment_status_label }}</td>
+                      <td style="padding:.85rem 0 .85rem 1rem;text-align:right">{{ order.total_net_amount | money }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+          {%- else -%}
+            <p class="text-muted">{{ 'customer.orders.none' | t }}</p>
+          {%- endif -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endpaginate -%}
+      </div>
+
+      <div class="card" style="padding:1.5rem">
+        <h2 class="h3" style="margin-bottom:1rem">{{ 'customer.account.details' | t }}</h2>
+        <p style="font-weight:600">{{ customer.name }}</p>
+        <p class="text-muted">{{ customer.email }}</p>
+        {%- if customer.default_address -%}
+          <div class="rte text-muted" style="margin-top:1rem">{{ customer.default_address | format_address }}</div>
+        {%- endif -%}
+        <a class="btn btn--ghost" style="margin-top:1.25rem" href="{{ routes.account_addresses_url }}"><span class="btn__label">{{ 'customer.account.addresses' | t }}</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Account", "settings": [] }
+{% endschema %}

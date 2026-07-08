@@ -1,0 +1,34 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Tienda", "menu": "footer" }
+        },
+        "help": {
+          "type": "menu",
+          "settings": { "heading": "Ayuda", "menu": "footer" }
+        },
+        "contact": {
+          "type": "text",
+          "settings": {
+            "heading": "Contacto",
+            "content": "<p>Carrer de la Muntanya, 11<br>46680 Algemesí, Valencia</p><p>L–V 9:30–14:00 · 17:00–20:00</p>"
+          }
+        }
+      },
+      "block_order": ["shop", "help", "contact"],
+      "settings": {
+        "tagline": "Tu copistería de barrio en Algemesí, pero con superpoderes. Si lo puedes imaginar, lo imprimimos.",
+        "enable_newsletter": true,
+        "show_payment_icons": true,
+        "show_locale_selector": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

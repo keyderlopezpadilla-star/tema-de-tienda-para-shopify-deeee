@@ -1,0 +1,19 @@
+{%- comment -%} DEEE TODO — 404 page. {%- endcomment -%}
+<section class="section relative overflow-clip" style="min-height:70vh;display:grid;place-items:center;text-align:center">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__blob ambient__blob--1"></div>
+    <div class="ambient__blob ambient__blob--2"></div>
+  </div>
+  <div class="container container--narrow z-1 stack" style="--stack:1.5rem;align-items:center">
+    <span class="display text-gradient" style="font-size:clamp(5rem,18vw,12rem);line-height:.9">404</span>
+    <h1 class="h2" data-split>{{ 'templates.404.title' | t }}</h1>
+    <p class="lead" style="margin-inline:auto">{{ 'templates.404.subtext' | t }}</p>
+    <a class="btn btn--primary btn--lg" href="{{ routes.root_url }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+      <span class="btn__label">{{ 'templates.404.back_home' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+    </a>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "404", "settings": [] }
+{% endschema %}

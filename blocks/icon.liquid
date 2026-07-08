@@ -1,0 +1,42 @@
+{%- comment -%} DEEE TODO — Reusable icon + label theme block. {%- endcomment -%}
+<div class="block-icon cluster" style="--gap:.75rem;{% if block.settings.align == 'center' %}justify-content:center;flex-direction:column;text-align:center{% endif %}" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal{% endif %}>
+  <span style="color:{{ block.settings.color }}">{% render 'icon', name: block.settings.icon, class: 'icon icon--lg' %}</span>
+  <div>
+    {%- if block.settings.title != blank -%}<div style="font-weight:600">{{ block.settings.title }}</div>{%- endif -%}
+    {%- if block.settings.text != blank -%}<div class="text-muted" style="font-size:.9rem">{{ block.settings.text }}</div>{%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icon",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "printer", "label": "Printer" },
+        { "value": "truck", "label": "Truck" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "sparkles", "label": "Sparkles" },
+        { "value": "heart", "label": "Heart" },
+        { "value": "star", "label": "Star" },
+        { "value": "check", "label": "Check" }
+      ],
+      "default": "sparkles"
+    },
+    { "type": "color", "id": "color", "label": "Icon color", "default": "#00f0ff" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Calidad premium" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Materiales de primera calidad." },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ],
+      "default": "left"
+    }
+  ],
+  "presets": [{ "name": "Icon" }]
+}
+{% endschema %}

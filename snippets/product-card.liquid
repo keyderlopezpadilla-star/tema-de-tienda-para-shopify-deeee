@@ -1,0 +1,85 @@
+{%- comment -%}
+  Premium product card with hover image swap, badges, rating, quick add.
+  Params: product (required), reveal (bool), image_ratio
+{%- endcomment -%}
+{%- liquid
+  assign ratio = image_ratio | default: settings.product_image_ratio
+  assign second = product.media[1]
+  assign show_second = settings.show_second_image
+  assign first_variant = product.selected_or_first_available_variant
+-%}
+{%- if product and product != empty -%}
+  <article
+    class="product-card {% if settings.card_glow %}glow-ring{% endif %}"
+    {% if reveal %}data-reveal data-reveal-stagger{% endif %}
+  >
+    <div class="product-card__media">
+      {%- if product.featured_media -%}
+        {% render 'responsive-image',
+          image: product.featured_media,
+          ratio: ratio,
+          sizes: '(min-width: 990px) 25vw, 45vw',
+          class: 'primary',
+          alt: product.title %}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+
+      {%- if show_second and second -%}
+        <img
+          class="secondary"
+          src="{{ second | image_url: width: 800 }}"
+          srcset="{{ second | image_url: width: 480 }} 480w, {{ second | image_url: width: 800 }} 800w"
+          sizes="(min-width: 990px) 25vw, 45vw"
+          alt="{{ product.title | escape }}"
+          loading="lazy"
+          width="800"
+          height="1000"
+        >
+      {%- endif -%}
+
+      <div class="product-card__badges">
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign save = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+          <span class="badge">-{{ save }}%</span>
+        {%- endif -%}
+        {%- unless product.available -%}
+          <span class="badge badge--neon">{{ 'products.product.out_of_stock' | t }}</span>
+        {%- endunless -%}
+        {%- if product.tags contains 'new' -%}
+          <span class="badge badge--neon">{{ 'products.product.new' | t }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if settings.show_quick_add and product.available -%}
+        <div class="product-card__quick">
+          {%- if product.variants.size > 1 -%}
+            <a class="btn btn--full glass" href="{{ product.url }}">
+              <span class="btn__label">{{ 'products.product.choose_options' | t }}</span>
+            </a>
+          {%- else -%}
+            <product-form>
+              <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="{{ first_variant.id }}">
+                <button type="submit" class="btn btn--primary btn--full" {% unless first_variant.available %}aria-disabled="true"{% endunless %}>
+                  <span class="btn__label">{{ 'products.product.quick_add' | t }}</span>
+                </button>
+              </form>
+            </product-form>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-card__info">
+      {%- if settings.show_vendor and product.vendor != blank -%}
+        <span class="product-card__vendor">{{ product.vendor }}</span>
+      {%- endif -%}
+      <h3 class="product-card__title relative">
+        <a href="{{ product.url }}">{{ product.title }}</a>
+      </h3>
+      {% render 'rating', product: product %}
+      {% render 'price', product: product, class: '', show_from: true %}
+    </div>
+  </article>
+{%- endif -%}

@@ -1,0 +1,69 @@
+{%- comment -%} DEEE TODO — Featured collection product carousel/grid. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign collection = collections[s.collection]
+  assign products = collection.products
+  assign limit = s.products_to_show
+-%}
+<section class="section" data-accent-shift="{{ s.accent }}">
+  <div class="container">
+    <div class="cluster" style="justify-content:space-between;align-items:flex-end;margin-bottom:2rem">
+      {% render 'section-header',
+        eyebrow: s.eyebrow,
+        heading: s.heading,
+        text: s.subheading,
+        alignment: 'left',
+        split: true %}
+      {%- if s.show_view_all and collection != blank -%}
+        <a class="btn btn--ghost" href="{{ collection.url }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+          <span class="btn__label">{{ s.view_all_label | default: 'Ver todo' }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if collection != blank and products.size > 0 -%}
+      <div class="product-grid product-grid--{{ s.columns }}">
+        {%- for product in products limit: limit -%}
+          {% render 'product-card', product: product, reveal: settings.scroll_reveal %}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="product-grid product-grid--{{ s.columns }}">
+        {%- for i in (1..limit) -%}
+          <div class="product-card">
+            <div class="product-card__media">{{ 'product-1' | placeholder_svg_tag: 'placeholder' }}</div>
+            <div class="product-card__info">
+              <h3 class="product-card__title">Producto de ejemplo</h3>
+              <span class="price">{{ 1999 | money }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Tienda virtual" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Tu tienda online 24/7" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Compra desde casa y recibe tu pedido personalizado en 24-48 horas." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 8 },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ],
+      "default": "4"
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show 'view all'", "default": true },
+    { "type": "text", "id": "view_all_label", "label": "View all label", "default": "Ver todo" },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#00f0ff" }
+  ],
+  "presets": [{ "name": "Featured collection" }],
+  "enabled_on": { "templates": ["index", "page", "collection"] }
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- comment -%}
+  DEEE TODO — Flexible layout section that accepts any theme block (@theme)
+  and app blocks (@app). Great for building bespoke content rows.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" style="{% if s.background != blank %}background:{{ s.background }};{% endif %}{% if s.tight %}padding-block:clamp(1.5rem,4vw,3rem);{% endif %}">
+  <div class="container {% if s.width == 'narrow' %}container--narrow{% elsif s.width == 'wide' %}container--wide{% endif %}">
+    <div
+      class="flex-layout"
+      style="display:grid;gap:{{ s.gap }}px;{% if s.columns > 1 %}grid-template-columns:repeat(auto-fit,minmax(240px,1fr));{% endif %}{% if s.align == 'center' %}text-align:center;place-items:center;{% endif %}"
+    >
+      {%- content_for 'blocks' -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Flexible layout",
+  "blocks": [{ "type": "@theme" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [ { "value": "narrow", "label": "Narrow" }, { "value": "default", "label": "Default" }, { "value": "wide", "label": "Wide" } ],
+      "default": "default"
+    },
+    { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 8, "max": 64, "step": 4, "unit": "px", "default": 24 },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ],
+      "default": "left"
+    },
+    { "type": "checkbox", "id": "tight", "label": "Reduce padding", "default": false },
+    { "type": "color_background", "id": "background", "label": "Background" }
+  ],
+  "presets": [{ "name": "Flexible layout", "blocks": [{ "type": "text" }, { "type": "button" }] }],
+  "enabled_on": { "templates": ["*"] }
+}
+{% endschema %}

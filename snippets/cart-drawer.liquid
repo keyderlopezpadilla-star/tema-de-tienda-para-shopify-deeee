@@ -1,0 +1,62 @@
+{%- comment -%}
+  Slide-in AJAX cart drawer. Body + footer are hydrated by assets/cart.js.
+  Only rendered when cart type is "drawer".
+{%- endcomment -%}
+{%- if settings.cart_type == 'drawer' -%}
+  {%- liquid
+    assign threshold_cents = settings.free_shipping_threshold | times: 100
+    unless settings.enable_free_shipping_bar
+      assign threshold_cents = 0
+    endunless
+  -%}
+  <aside
+    id="CartDrawer"
+    class="cart-drawer"
+    data-cart-drawer
+    data-closable
+    data-free-ship-threshold="{{ threshold_cents }}"
+    aria-hidden="true"
+    aria-label="{{ 'cart.general.title' | t }}"
+    role="dialog"
+    aria-modal="true"
+  >
+    <header class="cart-drawer__header">
+      <h2 class="h3">{{ 'cart.general.title' | t }} <span class="text-muted" data-cart-count>{{ cart.item_count }}</span></h2>
+      <button class="header__icon-btn" type="button" data-close aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon', name: 'close' %}
+      </button>
+    </header>
+
+    <div class="cart-drawer__body" data-cart-drawer-body aria-live="polite">
+      {%- comment -%} Populated by JS; SSR fallback below for no-JS. {%- endcomment -%}
+      {%- if cart.item_count > 0 -%}
+        {%- for item in cart.items -%}
+          <div class="cart-item">
+            <a class="cart-item__media media" href="{{ item.url }}">
+              {%- if item.image -%}<img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}" width="72" height="72" loading="lazy">{%- endif -%}
+            </a>
+            <div>
+              <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+              {%- unless item.variant.title == 'Default Title' -%}<p class="cart-item__variant">{{ item.variant.title }}</p>{%- endunless -%}
+            </div>
+            <span class="price">{{ item.final_line_price | money }}</span>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        <div class="cart-empty">
+          <p class="h3">{{ 'cart.general.empty' | t }}</p>
+          <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}" data-close><span class="btn__label">{{ 'cart.general.continue' | t }}</span></a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <footer class="cart-drawer__footer" data-cart-drawer-footer {% if cart.item_count == 0 %}hidden{% endif %}>
+      <div class="cluster" style="justify-content:space-between;margin-bottom:1rem">
+        <span class="text-muted">{{ 'cart.general.subtotal' | t }}</span>
+        <span class="price price--large">{{ cart.total_price | money }}</span>
+      </div>
+      <a class="btn btn--primary btn--full btn--lg" href="{{ routes.cart_url }}"><span class="btn__label">{{ 'cart.general.checkout' | t }}</span></a>
+      <p class="form__note text-center" style="margin-top:.75rem">{{ 'cart.general.taxes_note' | t }}</p>
+    </footer>
+  </aside>
+{%- endif -%}

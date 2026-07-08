@@ -1,0 +1,114 @@
+{%- comment -%} DEEE TODO — Animated footer with newsletter, link columns & social. {%- endcomment -%}
+<footer class="footer" role="contentinfo">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__blob ambient__blob--2" style="opacity:.18"></div>
+  </div>
+  <div class="container z-1">
+    <div class="footer__top">
+      <div class="footer__brand stack" style="--stack:1.25rem" {% if settings.scroll_reveal %}data-reveal{% endif %}>
+        <a href="{{ routes.root_url }}" class="header__logo" style="font-size:1.5rem">
+          {%- if settings.logo != blank -%}
+            <img src="{{ settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}" width="140" style="width:140px;height:auto">
+          {%- else -%}
+            {{ shop.name }}<span class="dot">.</span>
+          {%- endif -%}
+        </a>
+        {%- if section.settings.tagline != blank -%}
+          <p class="lead">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.enable_newsletter -%}
+          <div class="stack" style="--stack:.75rem;max-width:26rem">
+            <h3 class="footer__col-title">{{ 'sections.footer.newsletter_title' | t }}</h3>
+            {%- form 'customer', class: 'newsletter-form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="search-field">
+                <input type="email" name="contact[email]" required placeholder="{{ 'general.newsletter.label' | t }}" aria-label="{{ 'general.newsletter.label' | t }}" style="border:0;background:transparent">
+                <button type="submit" class="btn btn--primary btn--sm" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+                  <span class="btn__label">{% render 'icon', name: 'arrow-right' %}</span>
+                </button>
+              </div>
+              {%- if form.posted_successfully? -%}
+                <p class="form-status form-status--success">{{ 'general.newsletter.success' | t }}</p>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+
+        {% render 'social-icons' %}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu' -%}
+          <div class="footer__col" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+            <h3 class="footer__col-title">{{ block.settings.heading }}</h3>
+            {%- if block.settings.menu != blank -%}
+              {%- for link in block.settings.menu.links -%}
+                <a class="footer__link" href="{{ link.url }}">{{ link.title }}</a>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- elsif block.type == 'text' -%}
+          <div class="footer__col" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+            <h3 class="footer__col-title">{{ block.settings.heading }}</h3>
+            <div class="rte text-muted">{{ block.settings.content }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'sections.footer.copyright' | t }}</p>
+      {%- if section.settings.show_payment_icons -%}
+        <div class="payment-icons">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.show_locale_selector and localization.available_countries.size > 1 -%}
+        <div class="mono" style="font-size:.8rem">{{ localization.country.name }} · {{ cart.currency.iso_code }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Tu copistería de barrio en Algemesí, pero con superpoderes. Si lo puedes imaginar, lo imprimimos." },
+    { "type": "checkbox", "id": "enable_newsletter", "label": "Show newsletter", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true },
+    { "type": "checkbox", "id": "show_locale_selector", "label": "Show country/currency", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Tienda" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Contacto" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Carrer de la Muntanya, 11<br>46680 Algemesí, Valencia</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu", "settings": { "heading": "Tienda" } },
+        { "type": "menu", "settings": { "heading": "Ayuda" } },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

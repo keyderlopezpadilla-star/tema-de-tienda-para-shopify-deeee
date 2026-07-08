@@ -1,0 +1,15 @@
+/**
+ * Optional Tailwind entry.
+ * The shipped theme uses the handcrafted design system in /assets/base.css
+ * and /assets/components.css (no build required). This file lets contributors
+ * layer Tailwind utility classes on top when running `npm run build`.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+}

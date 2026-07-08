@@ -1,0 +1,57 @@
+{%- comment -%} DEEE TODO — Animated stat counters. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" style="{% if s.background != blank %}background:{{ s.background }};{% endif %}" data-accent-shift="{{ s.accent }}">
+  <div class="container">
+    {% render 'section-header', eyebrow: s.eyebrow, heading: s.heading, text: s.subheading, alignment: 'center', split: true %}
+
+    <div class="grid" style="--gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-top:3rem;text-align:center">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign numeric = block.settings.value | replace: '+', '' | replace: ',', '' | replace: '%', '' | replace: 'k', '000' | replace: 'K', '000'
+        -%}
+        <div class="stack" style="--stack:.5rem" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+          <div class="display text-gradient{% if block.settings.neon %}--neon{% endif %}" style="font-size:clamp(2.5rem,6vw,4.5rem)" data-count-to="{{ numeric }}" data-count-suffix="{{ block.settings.suffix }}">{{ block.settings.value }}</div>
+          <div class="text-muted mono" style="font-size:.9rem;letter-spacing:.05em">{{ block.settings.label }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Stats",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "¿Por qué DEEE TODO?" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Tecnología, experiencia y pasión" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Combinamos lo mejor para ofrecerte el mejor servicio de impresión y personalización." },
+    { "type": "color_background", "id": "background", "label": "Background" },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#00c758" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "15+" },
+        { "type": "text", "id": "suffix", "label": "Suffix (e.g. +, %, h)", "default": "+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Años de experiencia" },
+        { "type": "checkbox", "id": "neon", "label": "Neon gradient", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stats",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "15", "suffix": "+", "label": "Años de experiencia" } },
+        { "type": "stat", "settings": { "value": "10000", "suffix": "+", "label": "Proyectos completados", "neon": true } },
+        { "type": "stat", "settings": { "value": "99", "suffix": "%", "label": "Satisfacción del cliente" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index", "page"] }
+}
+{% endschema %}

@@ -1,0 +1,185 @@
+{
+  "general": {
+    "meta": {
+      "tags": "Etiquetas: {{ tags }}",
+      "page": "Página {{ page }}"
+    },
+    "search": {
+      "title": "Buscar",
+      "placeholder": "¿Qué estás buscando hoy?",
+      "searching": "Buscando…",
+      "no_results": "Sin resultados para",
+      "view_all": "Ver todos los resultados",
+      "results_for": "Resultados para “{{ terms }}”",
+      "no_results_html": "No encontramos nada para “{{ terms }}”. Prueba con otra búsqueda.",
+      "products": "Productos",
+      "collections": "Colecciones",
+      "pages": "Páginas",
+      "articles": "Artículos",
+      "submit": "Buscar"
+    },
+    "newsletter": {
+      "success": "¡Gracias por suscribirte! 🙌",
+      "label": "Correo electrónico",
+      "button": "Suscribirme"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "load_more": "Cargar más"
+    },
+    "errors": {
+      "generic": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "social": {
+      "follow": "Síguenos"
+    },
+    "continue_shopping": "Seguir comprando",
+    "share": "Compartir"
+  },
+  "accessibility": {
+    "skip_to_content": "Saltar al contenido",
+    "close": "Cerrar",
+    "menu": "Menú",
+    "cart": "Carrito",
+    "search": "Buscar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "loading": "Cargando",
+    "star_reviews_info": "{{ rating_value }} de {{ rating_max }} estrellas"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Añadir al carrito",
+      "sold_out": "Agotado",
+      "unavailable": "No disponible",
+      "added": "Añadido al carrito ✨",
+      "on_sale": "Oferta",
+      "new": "Nuevo",
+      "from_price": "Desde {{ price }}",
+      "quantity": "Cantidad",
+      "vendor": "Marca",
+      "sku": "SKU",
+      "description": "Descripción",
+      "details": "Detalles",
+      "shipping": "Envío y entrega",
+      "share": "Compartir",
+      "in_stock": "En stock",
+      "low_stock": "¡Últimas unidades!",
+      "out_of_stock": "Sin stock",
+      "view_full_details": "Ver detalles",
+      "related": "También te puede gustar",
+      "recently_viewed": "Vistos recientemente",
+      "choose_options": "Elegir opciones",
+      "quick_add": "Añadir rápido"
+    },
+    "facets": {
+      "filter": "Filtrar",
+      "sort_by": "Ordenar por",
+      "clear_all": "Limpiar todo",
+      "apply": "Aplicar",
+      "results": "{{ count }} productos",
+      "from": "Desde",
+      "to": "Hasta",
+      "price": "Precio"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Tu carrito",
+      "checkout": "Finalizar compra",
+      "subtotal": "Subtotal",
+      "remove": "Quitar",
+      "quantity": "Cantidad",
+      "increase": "Sumar",
+      "decrease": "Restar",
+      "empty": "Tu carrito está vacío",
+      "empty_body": "Aún no has añadido nada. ¡Vamos a por ello!",
+      "continue": "Explorar productos",
+      "taxes_note": "Impuestos y envío calculados en el checkout.",
+      "free_ship_remaining": "Te faltan {amount} para el envío gratis 🚚",
+      "free_ship_unlocked": "¡Envío gratis desbloqueado! 🎉",
+      "recommendations": "Completa tu pedido",
+      "note": "Instrucciones del pedido",
+      "update": "Actualizar"
+    }
+  },
+  "sections": {
+    "header": {
+      "announcement": "Anuncio",
+      "menu": "Menú",
+      "cart_count": "{{ count }} artículos en el carrito"
+    },
+    "footer": {
+      "newsletter_title": "Únete a la fábrica de ideas",
+      "newsletter_text": "Novedades, ofertas y un poquito de rollo gamberro en tu correo.",
+      "copyright": "Todos los derechos reservados."
+    },
+    "collection": {
+      "empty": "No hay productos en esta colección todavía.",
+      "products_count": "{{ count }} productos"
+    },
+    "contact": {
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "message": "Cuéntanos tu idea",
+      "send": "Enviar mensaje",
+      "success": "¡Mensaje enviado! Te responderemos enseguida. ✌️"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Leer más",
+      "by": "Por {{ author }}",
+      "tags": "Etiquetas",
+      "comments": "Comentarios",
+      "back": "Volver al blog"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Mi cuenta",
+      "orders": "Pedidos",
+      "addresses": "Direcciones",
+      "logout": "Cerrar sesión",
+      "details": "Detalles de la cuenta"
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Entrar",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "create": "Crear cuenta",
+      "guest": "Continuar como invitado"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "first_name": "Nombre",
+      "last_name": "Apellidos",
+      "submit": "Registrarme"
+    },
+    "orders": {
+      "order_number": "Pedido {{ number }}",
+      "date": "Fecha",
+      "payment_status": "Estado del pago",
+      "fulfillment_status": "Estado del envío",
+      "total": "Total",
+      "none": "Aún no has hecho ningún pedido."
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Tarjeta regalo de {{ value }} para {{ shop }}",
+      "copy_code": "Copiar código"
+    }
+  },
+  "templates": {
+    "404": {
+      "title": "Página no encontrada",
+      "subtext": "La página que buscas se fue de fiesta. Volvamos al inicio.",
+      "back_home": "Ir al inicio"
+    }
+  }
+}

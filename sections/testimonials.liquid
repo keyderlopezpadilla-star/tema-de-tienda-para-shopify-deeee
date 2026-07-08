@@ -1,0 +1,68 @@
+{%- comment -%} DEEE TODO — Testimonials with glass cards. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" data-accent-shift="{{ s.accent }}">
+  <div class="container">
+    {% render 'section-header', eyebrow: s.eyebrow, heading: s.heading, alignment: 'center', split: true %}
+
+    <div class="grid" style="--gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:3rem">
+      {%- for block in section.blocks -%}
+        <figure
+          class="card {% if settings.glassmorphism %}glass{% endif %}"
+          style="padding:1.75rem;display:flex;flex-direction:column;gap:1.25rem"
+          {{ block.shopify_attributes }}
+          {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}
+        >
+          <span style="color:var(--color-brand)">{% render 'icon', name: 'quote', class: 'icon icon--lg' %}</span>
+          <blockquote style="font-size:1.05rem;line-height:1.6">{{ block.settings.quote }}</blockquote>
+          <figcaption style="margin-top:auto;display:flex;align-items:center;gap:.85rem">
+            {%- if block.settings.avatar != blank -%}
+              <img src="{{ block.settings.avatar | image_url: width: 96 }}" alt="{{ block.settings.author | escape }}" width="44" height="44" style="border-radius:50%;width:44px;height:44px;object-fit:cover" loading="lazy">
+            {%- endif -%}
+            <div>
+              <div style="font-weight:600">{{ block.settings.author }}</div>
+              {%- if block.settings.role != blank -%}<div class="text-muted" style="font-size:.85rem">{{ block.settings.role }}</div>{%- endif -%}
+            </div>
+            <span class="rating__stars" style="--pct:{{ block.settings.rating | times: 20 }}%;margin-left:auto" role="img" aria-label="{{ block.settings.rating }}/5"></span>
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Lo que dicen" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Miles de vecinos ya confían en nosotros" },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#edb200" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "Entré con un pendrive perdido y salí con todo resuelto. ¡Son unos cracks!" },
+        { "type": "text", "id": "author", "label": "Author", "default": "María G." },
+        { "type": "text", "id": "role", "label": "Role", "default": "Cliente de Algemesí" },
+        { "type": "image_picker", "id": "avatar", "label": "Avatar" },
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial", "settings": { "quote": "Mi TFG quedó espectacular y en tiempo récord. Repetiré seguro.", "author": "Jordi P.", "role": "Estudiante" } },
+        { "type": "testimonial", "settings": { "quote": "Las camisetas personalizadas para el equipo fueron un éxito total.", "author": "Laura V.", "role": "Club deportivo" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index", "page"] }
+}
+{% endschema %}

@@ -1,0 +1,53 @@
+{%- comment -%} DEEE TODO — Infinite scrolling marquee of phrases. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section--tight overflow-clip" style="padding-block: {{ s.padding }}px; {% if s.background != blank %}background: {{ s.background }};{% endif %}" data-accent-shift="{{ settings.color_neon_cyan }}">
+  <div class="marquee {% if s.reverse %}marquee--reverse{% endif %}" style="--marquee-duration: {{ s.speed }}s">
+    {%- for i in (1..2) -%}
+      <div class="marquee__track" aria-hidden="{% if i == 2 %}true{% else %}false{% endif %}">
+        {%- for block in section.blocks -%}
+          <span class="marquee__item" {{ block.shopify_attributes }}>
+            <span class="marquee__star">✦</span>
+            {%- if s.gradient_text -%}<span class="text-gradient">{{ block.settings.text }}</span>{%- else -%}{{ block.settings.text }}{%- endif -%}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    { "type": "range", "id": "speed", "label": "Speed (s)", "min": 10, "max": 60, "step": 2, "default": 30 },
+    { "type": "checkbox", "id": "reverse", "label": "Reverse direction", "default": false },
+    { "type": "checkbox", "id": "gradient_text", "label": "Gradient text", "default": false },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 8, "max": 80, "step": 4, "unit": "px", "default": 28 },
+    { "type": "color_background", "id": "background", "label": "Background" }
+  ],
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Plastificamos hasta tus recuerdos 📸" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        { "type": "phrase", "settings": { "text": "¿Una copia urgente? Corre, que te esperamos 🏃" } },
+        { "type": "phrase", "settings": { "text": "Plastificamos hasta tus recuerdos 📸" } },
+        { "type": "phrase", "settings": { "text": "Tu TFG encuadernado y reluciente 🎓" } },
+        { "type": "phrase", "settings": { "text": "Carteles que se ven desde la luna 🌙" } },
+        { "type": "phrase", "settings": { "text": "Camisetas con tu cara (sí, en serio) 👕" } },
+        { "type": "phrase", "settings": { "text": "Pegatinas para todo lo pegable 🏷️" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

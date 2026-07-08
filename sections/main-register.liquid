@@ -1,0 +1,35 @@
+{%- comment -%} DEEE TODO — Customer registration. {%- endcomment -%}
+<section class="section">
+  <div class="container" style="max-width:32rem">
+    <h1 class="h1" style="margin-bottom:1.5rem" data-split>{{ 'customer.register.title' | t }}</h1>
+    {%- form 'create_customer', class: 'card' -%}
+      <div style="padding:1.75rem;display:grid;gap:1rem">
+        {%- if form.errors -%}<p class="form-status form-status--error">{{ form.errors | default_errors }}</p>{%- endif -%}
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="field">
+            <label class="field__label" for="RegFirst">{{ 'customer.register.first_name' | t }}</label>
+            <input class="input" type="text" id="RegFirst" name="customer[first_name]" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label class="field__label" for="RegLast">{{ 'customer.register.last_name' | t }}</label>
+            <input class="input" type="text" id="RegLast" name="customer[last_name]" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegEmail">{{ 'customer.login.email' | t }}</label>
+          <input class="input" type="email" id="RegEmail" name="customer[email]" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="RegPassword">{{ 'customer.login.password' | t }}</label>
+          <input class="input" type="password" id="RegPassword" name="customer[password]" autocomplete="new-password" required>
+        </div>
+        <button class="btn btn--primary btn--full btn--lg" type="submit"><span class="btn__label">{{ 'customer.register.submit' | t }}</span></button>
+        <a class="link-underline mono text-center" style="font-size:.85rem" href="{{ routes.account_login_url }}">{{ 'customer.login.title' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Register", "settings": [] }
+{% endschema %}

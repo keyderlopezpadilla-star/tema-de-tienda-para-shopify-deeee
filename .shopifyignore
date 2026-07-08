@@ -1,0 +1,25 @@
+# Files that should never be pushed to the Shopify store
+node_modules/
+src/
+.git/
+.github/
+.vite/
+dist/
+*.md
+!templates/*.md
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+tailwind.config.js
+postcss.config.js
+vite.config.js
+tsconfig.json
+.eslintrc*
+eslint.config.js
+.prettierrc*
+.editorconfig
+.gitignore
+.shopifyignore
+.theme-check.yml
+LICENSE

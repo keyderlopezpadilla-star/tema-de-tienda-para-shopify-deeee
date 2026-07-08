@@ -1,0 +1,50 @@
+{
+  "name": "deee-todo-theme",
+  "version": "1.0.0",
+  "description": "DEEE TODO — Premium immersive Shopify Online Store 2.0 theme. Dark, neon, motion-rich experience inspired by deeetodo.com.",
+  "author": "DEEE TODO",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "shopify theme dev",
+    "dev:css": "vite build --watch",
+    "build": "vite build",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "check": "shopify theme check",
+    "lint:js": "eslint \"src/**/*.{js,ts}\"",
+    "format": "prettier --write \"**/*.{js,ts,css,json,liquid}\"",
+    "watch": "concurrently \"npm:dev:css\" \"npm:dev\""
+  },
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.9.3",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "cssnano": "^7.0.6",
+    "eslint": "^9.18.0",
+    "postcss": "^8.5.1",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  },
+  "dependencies": {
+    "gsap": "^3.12.7",
+    "lenis": "^1.1.20",
+    "lottie-web": "^5.12.2",
+    "motion": "^11.16.0",
+    "split-type": "^0.3.4",
+    "swiper": "^11.2.1",
+    "three": "^0.172.0"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "iOS >= 14",
+    "Safari >= 14"
+  ]
+}

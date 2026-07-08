@@ -1,0 +1,88 @@
+{%- comment -%} DEEE TODO — Collection page with AJAX facets, sorting & infinite scroll. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  paginate collection.products by s.products_per_page
+-%}
+<section
+  class="section"
+  data-facets-container
+  data-section-id="{{ section.id }}"
+  data-infinite="{{ s.enable_infinite_scroll }}"
+  aria-busy="false"
+>
+  <div class="container">
+    {%- comment -%} Banner {%- endcomment -%}
+    <div class="collection-banner" style="margin-bottom:2rem" data-parallax-scope>
+      {%- if s.show_banner_image and collection.image -%}
+        <div class="media ratio-wide overflow-clip" style="border-radius:var(--radius-xl);position:relative" data-scroll-zoom>
+          {% render 'responsive-image', image: collection.image, ratio: 'wide', sizes: '100vw', loading: 'eager', fetchpriority: 'high' %}
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(var(--color-bg-rgb),.85), rgba(var(--color-bg-rgb),.2));display:flex;align-items:flex-end;padding:clamp(1.5rem,4vw,3rem)">
+            <div>
+              <h1 class="display" style="font-size:clamp(2rem,5vw,3.5rem)" data-split>{{ collection.title }}</h1>
+              {%- if collection.description != blank and s.show_description -%}<div class="lead">{{ collection.description | strip_html | truncatewords: 30 }}</div>{%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- else -%}
+        <h1 class="display" style="font-size:clamp(2rem,5vw,3.5rem)" data-split>{{ collection.title | default: 'Productos' }}</h1>
+        {%- if collection.description != blank and s.show_description -%}<div class="lead" style="margin-top:1rem">{{ collection.description }}</div>{%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- if s.enable_filtering or s.enable_sorting -%}
+      {% render 'facets', results: collection, enable_filtering: s.enable_filtering, enable_sorting: s.enable_sorting %}
+    {%- endif -%}
+
+    {%- if collection.products.size > 0 -%}
+      <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid style="margin-top:1.5rem">
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product, reveal: settings.scroll_reveal, image_ratio: s.image_ratio %}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.next -%}
+        <div class="text-center" data-load-more data-next-url="{{ paginate.next.url }}" style="margin-top:2.5rem">
+          <button class="btn btn--ghost btn--lg" data-load-more-btn {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+            <span class="btn__label">{{ 'general.pagination.load_more' | t }}</span>
+          </button>
+        </div>
+      {%- endif -%}
+
+      {%- unless s.enable_infinite_scroll -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endunless -%}
+    {%- else -%}
+      <div class="cart-empty" data-facets-grid>
+        <p class="h3">{{ 'sections.collection.empty' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "checkbox", "id": "show_banner_image", "label": "Show banner image", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 36, "step": 4, "default": 16 },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [ { "value": "portrait", "label": "Portrait" }, { "value": "square", "label": "Square" }, { "value": "landscape", "label": "Landscape" } ],
+      "default": "portrait"
+    },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
+    { "type": "checkbox", "id": "enable_infinite_scroll", "label": "Infinite scroll", "default": false }
+  ]
+}
+{% endschema %}

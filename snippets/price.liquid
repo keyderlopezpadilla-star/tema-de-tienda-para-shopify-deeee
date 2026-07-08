@@ -1,0 +1,38 @@
+{%- comment -%}
+  Price display with sale + "from" handling.
+  Params: product (or variant via `use_variant`), class, show_from
+{%- endcomment -%}
+{%- liquid
+  if product.selected_or_first_available_variant
+    assign target = product
+    assign variant = product.selected_or_first_available_variant
+    assign price = variant.price
+    assign compare = variant.compare_at_price
+  else
+    assign target = product
+    assign price = product.price
+    assign compare = product.compare_at_price
+  endif
+
+  assign on_sale = false
+  if compare > price
+    assign on_sale = true
+  endif
+
+  assign price_varies = false
+  if product.price_varies
+    assign price_varies = true
+  endif
+-%}
+<span class="price {{ class }}{% if on_sale %} price--on-sale{% endif %}" data-price-wrapper>
+  {%- if price_varies and show_from -%}
+    <span class="price__from">{{ 'products.product.from_price' | t: price: price | money }}</span>
+  {%- else -%}
+    {%- if on_sale -%}
+      <span class="price__regular">{{ compare | money }}</span>
+      <span class="price__sale" data-product-price>{{ price | money }}</span>
+    {%- else -%}
+      <span data-product-price>{{ price | money }}</span>
+    {%- endif -%}
+  {%- endif -%}
+</span>

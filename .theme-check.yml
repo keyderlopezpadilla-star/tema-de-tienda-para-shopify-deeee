@@ -1,0 +1,26 @@
+# Shopify Theme Check configuration
+# https://shopify.dev/docs/themes/tools/theme-check
+extends: theme-check:recommended
+
+ignore:
+  - node_modules/
+  - src/
+  - dist/
+  - .github/
+
+# The theme intentionally loads a few motion libraries from a CDN with SRI.
+RemoteAsset:
+  enabled: false
+
+# Prebuilt design-system CSS is large by design.
+AssetSizeCSS:
+  enabled: true
+  threshold_in_bytes: 120000
+
+AssetSizeJavaScript:
+  enabled: true
+  threshold_in_bytes: 90000
+
+# Allow parser-blocking scripts only where we deliberately need them.
+ParserBlockingScript:
+  enabled: true

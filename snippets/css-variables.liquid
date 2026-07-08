@@ -1,0 +1,87 @@
+{%- comment -%}
+  Maps Theme Editor settings to the CSS custom properties consumed by
+  assets/base.css and assets/components.css. Rendered in <head>.
+{%- endcomment -%}
+{%- liquid
+  assign radius = settings.corner_radius
+  case radius
+    when 'sharp'
+      assign r_sm = '2px'
+      assign r = '4px'
+      assign r_lg = '6px'
+      assign r_xl = '8px'
+    when 'round'
+      assign r_sm = '0.85rem'
+      assign r = '1.25rem'
+      assign r_lg = '1.75rem'
+      assign r_xl = '2.25rem'
+    else
+      assign r_sm = '0.5rem'
+      assign r = '0.875rem'
+      assign r_lg = '1.25rem'
+      assign r_xl = '1.75rem'
+  endcase
+
+  assign motion = settings.motion_intensity | divided_by: 100.0
+-%}
+{%- if settings.use_geist_cdn -%}
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    @font-face{font-family:'Geist';font-style:normal;font-weight:100 900;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Variable.woff2') format('woff2');}
+    @font-face{font-family:'Geist Mono';font-style:normal;font-weight:100 900;font-display:swap;src:url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/GeistMono-Variable.woff2') format('woff2');}
+  </style>
+{%- endif -%}
+<style>
+  :root {
+    --color-bg: {{ settings.color_background }};
+    --color-bg-rgb: {{ settings.color_background | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --color-surface: {{ settings.color_surface }};
+    --color-surface-2: {{ settings.color_surface_2 }};
+    --color-text: {{ settings.color_text }};
+    --color-text-muted: {{ settings.color_text_muted }};
+    --color-text-faint: {{ settings.color_text_muted | color_darken: 12 }};
+    --color-line: {{ settings.color_text | color_to_rgb | remove: 'rgb(' | remove: ')' | prepend: 'rgba(' | append: ', 0.09)' }};
+    --color-line-strong: {{ settings.color_text | color_to_rgb | remove: 'rgb(' | remove: ')' | prepend: 'rgba(' | append: ', 0.18)' }};
+
+    --color-brand: {{ settings.color_brand }};
+    --color-brand-rgb: {{ settings.color_brand | color_to_rgb | remove: 'rgb(' | remove: ')' }};
+    --color-brand-soft: {{ settings.color_brand_soft }};
+
+    --color-neon-cyan: {{ settings.color_neon_cyan }};
+    --color-neon-pink: {{ settings.color_neon_pink }};
+    --color-neon-purple: {{ settings.color_neon_purple }};
+    --color-neon-green: {{ settings.color_neon_green }};
+    --color-neon-gold: {{ settings.color_neon_gold }};
+
+    --gradient-brand: {{ settings.gradient_brand | default: 'linear-gradient(120deg, #fb2c36, #ff007a, #b300ff)' }};
+    --gradient-neon: {{ settings.gradient_neon | default: 'linear-gradient(120deg, #00f0ff, #3080ff, #b300ff)' }};
+
+    --font-body: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-heading: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-weight-heading: {{ settings.heading_weight }};
+    --font-scale: {{ settings.type_scale | divided_by: 100.0 }};
+
+    --radius-sm: {{ r_sm }};
+    --radius: {{ r }};
+    --radius-lg: {{ r_lg }};
+    --radius-xl: {{ r_xl }};
+
+    --container: {{ settings.page_width | append: 'px' }};
+    --space-section: {{ settings.section_spacing | append: 'px' }};
+
+    --motion-scale: {% if settings.animations_enabled %}{{ motion }}{% else %}0{% endif %};
+  }
+
+  {%- if settings.use_geist_cdn -%}
+    :root { --font-body: 'Geist', {{ settings.type_body_font.fallback_families }}; --font-heading: 'Geist', {{ settings.type_heading_font.fallback_families }}; }
+    .mono, .eyebrow, .header__logo, .footer__col-title, .mega__col-title, .predictive__heading, .product-card__vendor { font-family: 'Geist Mono', ui-monospace, monospace; }
+  {%- endif -%}
+
+  {%- unless settings.glassmorphism -%}
+    .glass { backdrop-filter: none; background: var(--color-surface); }
+  {%- endunless -%}
+
+  {%- unless settings.card_glow -%}
+    .glow-ring::before { display: none; }
+  {%- endunless -%}
+</style>

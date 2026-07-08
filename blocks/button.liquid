@@ -1,0 +1,32 @@
+{%- comment -%} DEEE TODO — Reusable button theme block. {%- endcomment -%}
+{%- if block.settings.label != blank -%}
+  <div class="block-button" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal{% endif %}>
+    <a
+      class="btn btn--{{ block.settings.style }} {% if block.settings.large %}btn--lg{% endif %}"
+      href="{{ block.settings.link | default: '#' }}"
+      {% if settings.magnetic_buttons %}data-magnetic{% endif %}
+    >
+      <span class="btn__label">{{ block.settings.label }}{% if block.settings.show_arrow %} {% render 'icon', name: 'arrow-right' %}{% endif %}</span>
+    </a>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Comprar ahora" },
+    { "type": "url", "id": "link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [ { "value": "primary", "label": "Primary" }, { "value": "ghost", "label": "Ghost" }, { "value": "neon", "label": "Neon" } ],
+      "default": "primary"
+    },
+    { "type": "checkbox", "id": "large", "label": "Large", "default": true },
+    { "type": "checkbox", "id": "show_arrow", "label": "Show arrow", "default": true }
+  ],
+  "presets": [{ "name": "Button" }]
+}
+{% endschema %}

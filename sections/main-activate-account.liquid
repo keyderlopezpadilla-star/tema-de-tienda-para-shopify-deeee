@@ -1,0 +1,26 @@
+{%- comment -%} DEEE TODO — Activate account. {%- endcomment -%}
+<section class="section">
+  <div class="container" style="max-width:32rem">
+    <h1 class="h1" style="margin-bottom:1rem" data-split>Activa tu cuenta</h1>
+    <p class="text-muted" style="margin-bottom:1.5rem">Crea una contraseña para activar tu cuenta.</p>
+    {%- form 'activate_customer_password', class: 'card' -%}
+      <div style="padding:1.75rem;display:grid;gap:1rem">
+        {%- if form.errors -%}<p class="form-status form-status--error">{{ form.errors | default_errors }}</p>{%- endif -%}
+        <div class="field">
+          <label class="field__label" for="ActPassword">{{ 'customer.login.password' | t }}</label>
+          <input class="input" type="password" id="ActPassword" name="customer[password]" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="ActConfirm">Confirmar contraseña</label>
+          <input class="input" type="password" id="ActConfirm" name="customer[password_confirmation]" autocomplete="new-password" required>
+        </div>
+        <button class="btn btn--primary btn--full btn--lg" type="submit"><span class="btn__label">Activar cuenta</span></button>
+        <button class="btn btn--ghost btn--full" type="submit" name="decline"><span class="btn__label">Rechazar invitación</span></button>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Activate account", "settings": [] }
+{% endschema %}

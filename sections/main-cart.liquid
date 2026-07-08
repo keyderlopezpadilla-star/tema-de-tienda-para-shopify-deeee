@@ -1,0 +1,105 @@
+{%- comment -%} DEEE TODO — Full cart page (works with or without JS). {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign threshold = settings.free_shipping_threshold | times: 100
+-%}
+<section class="section">
+  <div class="container container--narrow">
+    <h1 class="h1" style="margin-bottom:2rem" data-split>{{ 'cart.general.title' | t }}</h1>
+
+    {%- if cart.item_count > 0 -%}
+      {%- if settings.enable_free_shipping_bar and threshold > 0 -%}
+        {%- assign remaining = threshold | minus: cart.total_price -%}
+        {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+        {%- if pct > 100 %}{% assign pct = 100 %}{% endif -%}
+        <div class="free-shipping card" style="padding:1.25rem;margin-bottom:2rem">
+          <p style="font-size:.95rem">
+            {%- if remaining <= 0 -%}
+              {{ 'cart.general.free_ship_unlocked' | t }}
+            {%- else -%}
+              {%- assign remaining_money = remaining | money -%}
+              {{ 'cart.general.free_ship_remaining' | t | replace: '{amount}', remaining_money }}
+            {%- endif -%}
+          </p>
+          <div class="free-shipping__bar"><div class="free-shipping__fill" style="width:{{ pct }}%"></div></div>
+        </div>
+      {%- endif -%}
+
+      <form action="{{ routes.cart_url }}" method="post" id="CartForm">
+        <div class="cart-items">
+          {%- for item in cart.items -%}
+            <div class="cart-item" data-cart-item data-key="{{ item.key }}">
+              <a class="cart-item__media media" href="{{ item.url }}">
+                {%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}" width="90" height="90" loading="lazy">{%- endif -%}
+              </a>
+              <div>
+                <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.variant.title == 'Default Title' -%}<p class="cart-item__variant">{{ item.variant.title }}</p>{%- endunless -%}
+                {%- if item.selling_plan_allocation -%}<p class="cart-item__variant">{{ item.selling_plan_allocation.selling_plan.name }}</p>{%- endif -%}
+                <div class="cluster" style="--gap:.75rem;margin-top:.6rem">
+                  <div class="qty" data-cart-qty>
+                    <button type="button" data-cart-step="-1" aria-label="{{ 'cart.general.decrease' | t }}">−</button>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-quantity-key="{{ item.key }}" aria-label="{{ 'cart.general.quantity' | t }}">
+                    <button type="button" data-cart-step="1" aria-label="{{ 'cart.general.increase' | t }}">+</button>
+                  </div>
+                  <a href="{{ item.url_to_remove }}" class="cart-remove">{{ 'cart.general.remove' | t }}</a>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <span class="price">{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="card" style="padding:1.5rem;margin-top:2rem">
+          {%- if s.show_note -%}
+            <div class="field" style="margin-bottom:1.25rem">
+              <label class="field__label" for="CartNote">{{ 'cart.general.note' | t }}</label>
+              <textarea class="textarea" id="CartNote" name="note" style="min-height:5rem">{{ cart.note }}</textarea>
+            </div>
+          {%- endif -%}
+          <div class="cluster" style="justify-content:space-between;margin-bottom:1.25rem">
+            <span class="h3">{{ 'cart.general.subtotal' | t }}</span>
+            <span class="price price--large">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="form__note" style="margin-bottom:1rem">{{ 'cart.general.taxes_note' | t }}</p>
+          <div class="cluster" style="--gap:.75rem">
+            <button type="submit" name="update" class="btn btn--ghost">{{ 'cart.general.update' | t }}</button>
+            <button type="submit" name="checkout" class="btn btn--primary btn--lg" style="flex:1"><span class="btn__label">{{ 'cart.general.checkout' | t }} {% render 'icon', name: 'arrow-right' %}</span></button>
+          </div>
+        </div>
+      </form>
+    {%- else -%}
+      <div class="cart-empty card" style="padding:4rem 2rem">
+        <p class="h2">{{ 'cart.general.empty' | t }}</p>
+        <p class="text-muted" style="margin:1rem 0 2rem">{{ 'cart.general.empty_body' | t }}</p>
+        <a class="btn btn--primary btn--lg" href="{{ routes.all_products_collection_url }}"><span class="btn__label">{{ 'cart.general.continue' | t }}</span></a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var form = document.getElementById('CartForm');
+    if (!form) return;
+    form.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-cart-step]');
+      if (!step) return;
+      var input = step.parentElement.querySelector('input[name="updates[]"]');
+      var val = Math.max(0, (parseInt(input.value, 10) || 0) + parseInt(step.dataset.cartStep, 10));
+      input.value = val;
+      form.querySelector('[name="update"]').click();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    { "type": "checkbox", "id": "show_note", "label": "Show order note", "default": true }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,42 @@
+{%- comment -%}
+  Add-to-cart form + quantity + dynamic checkout button.
+  Params: product, section_id
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<product-form>
+  {%- form 'product', product, id: 'ProductForm', class: 'product-form stack', novalidate: 'novalidate' -%}
+    <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+    <div class="cluster" style="--gap:.75rem;flex-wrap:nowrap">
+      <div class="qty" data-form-qty>
+        <button type="button" data-qty-down aria-label="{{ 'cart.general.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
+        <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="{{ 'products.product.quantity' | t }}">
+        <button type="button" data-qty-up aria-label="{{ 'cart.general.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
+      </div>
+
+      <button
+        type="submit"
+        name="add"
+        class="btn btn--primary btn--lg"
+        style="flex:1"
+        data-add-to-cart
+        {% unless current_variant.available %}aria-disabled="true"{% endunless %}
+        {% if settings.magnetic_buttons %}data-magnetic="0.2"{% endif %}
+      >
+        <span class="btn__label">
+          {%- if current_variant.available -%}
+            {{ 'products.product.add_to_cart' | t }} {% render 'icon', name: 'cart' %}
+          {%- else -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+
+    {%- if product.selling_plan_groups == empty -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+  {%- endform -%}
+</product-form>

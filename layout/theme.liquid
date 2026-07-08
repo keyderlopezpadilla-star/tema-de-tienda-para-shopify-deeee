@@ -1,0 +1,137 @@
+<!doctype html>
+<html
+  lang="{{ request.locale.iso_code }}"
+  class="no-js"
+  data-motion="{% if settings.animations_enabled %}on{% else %}off{% endif %}"
+  data-smooth-scroll="{% if settings.smooth_scroll %}on{% else %}off{% endif %}"
+>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="{{ settings.color_background }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% render 'meta-tags' %}
+    {% render 'css-variables' %}
+
+    {{ content_for_header }}
+
+    {%- comment -%} Typography — Geist via Shopify Fonts fallback friendly {%- endcomment -%}
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'components.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <a class="skip-to-content" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+
+    {%- comment -%} Global JS config consumed by /assets modules {%- endcomment -%}
+    <script>
+      window.DEEE = window.DEEE || {};
+      window.DEEE.routes = {
+        root_url: {{ routes.root_url | json }},
+        cart_url: {{ routes.cart_url | json }},
+        cart_add_url: {{ routes.cart_add_url | json }},
+        cart_change_url: {{ routes.cart_change_url | json }},
+        cart_update_url: {{ routes.cart_update_url | json }},
+        predictive_search_url: {{ routes.predictive_search_url | json }},
+        search_url: {{ routes.search_url | json }},
+        all_products: {{ routes.all_products_collection_url | json }}
+      };
+      window.DEEE.moneyFormat = {{ shop.money_format | json }};
+      window.DEEE.strings = {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        added: {{ 'products.product.added' | t | json }},
+        checkout: {{ 'cart.general.checkout' | t | json }},
+        subtotal: {{ 'cart.general.subtotal' | t | json }},
+        remove: {{ 'cart.general.remove' | t | json }},
+        quantity: {{ 'cart.general.quantity' | t | json }},
+        increase: {{ 'cart.general.increase' | t | json }},
+        decrease: {{ 'cart.general.decrease' | t | json }},
+        cartEmpty: {{ 'cart.general.empty' | t | json }},
+        cartEmptyBody: {{ 'cart.general.empty_body' | t | json }},
+        startShopping: {{ 'cart.general.continue' | t | json }},
+        taxesNote: {{ 'cart.general.taxes_note' | t | json }},
+        freeShipRemaining: {{ 'cart.general.free_ship_remaining' | t | json }},
+        freeShipUnlocked: {{ 'cart.general.free_ship_unlocked' | t | json }},
+        searching: {{ 'general.search.searching' | t | json }},
+        noResults: {{ 'general.search.no_results' | t | json }},
+        viewAll: {{ 'general.search.view_all' | t | json }},
+        products: {{ 'general.search.products' | t | json }},
+        collections: {{ 'general.search.collections' | t | json }},
+        pages: {{ 'general.search.pages' | t | json }},
+        articles: {{ 'general.search.articles' | t | json }},
+        genericError: {{ 'general.errors.generic' | t | json }}
+      };
+    </script>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {%- comment -%} Global overlays {%- endcomment -%}
+    <div class="overlay" data-overlay></div>
+    {% render 'cart-drawer' %}
+    {% render 'search-modal' %}
+
+    {%- comment -%} Motion vendors (deferred, ordered). Fully optional. {%- endcomment -%}
+    {%- if settings.animations_enabled -%}
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js" defer></script>
+      {%- if settings.smooth_scroll -%}
+        <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%} Core theme modules (deferred, run in order after vendors) {%- endcomment -%}
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    <script src="{{ 'cart.js' | asset_url }}" defer></script>
+    {%- if settings.predictive_search_enabled -%}
+      <script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if request.page_type == 'product' -%}
+      <script src="{{ 'product-form.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if request.page_type == 'collection' or request.page_type == 'search' -%}
+      <script src="{{ 'facets.js' | asset_url }}" defer></script>
+    {%- endif -%}
+    {%- if settings.animations_enabled -%}
+      <script src="{{ 'animations.js' | asset_url }}" defer></script>
+      {%- if settings.enable_3d_hero -%}
+        <script src="https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.min.js" defer></script>
+        <script src="{{ 'three-scene.js' | asset_url }}" defer></script>
+      {%- endif -%}
+    {%- endif -%}
+  </body>
+</html>

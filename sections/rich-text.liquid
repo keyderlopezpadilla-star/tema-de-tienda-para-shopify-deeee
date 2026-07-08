@@ -1,0 +1,44 @@
+{%- comment -%} DEEE TODO — Centered rich text / CTA band. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" style="{% if s.background != blank %}background:{{ s.background }};{% endif %}" data-accent-shift="{{ s.accent }}">
+  <div class="container container--narrow text-center">
+    <div class="stack" style="--stack:1.5rem;align-items:center">
+      {%- if s.eyebrow != blank -%}<span class="eyebrow" {% if settings.scroll_reveal %}data-reveal{% endif %}>{{ s.eyebrow }}</span>{%- endif -%}
+      {%- if s.heading != blank -%}<h2 class="{{ s.heading_size }}" data-split>{{ s.heading }}</h2>{%- endif -%}
+      {%- if s.text != blank -%}<div class="lead" style="margin-inline:auto" {% if settings.scroll_reveal %}data-reveal{% endif %}>{{ s.text }}</div>{%- endif -%}
+      {%- if s.button_label != blank -%}
+        <div class="cluster" style="justify-content:center" {% if settings.scroll_reveal %}data-reveal{% endif %}>
+          <a class="btn btn--primary btn--lg" href="{{ s.button_link }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+            <span class="btn__label">{{ s.button_label }} {% render 'icon', name: 'sparkles' %}</span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "¿Tienes un proyecto en mente?" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [ { "value": "h2", "label": "Medium" }, { "value": "h1", "label": "Large" }, { "value": "display", "label": "Display" } ],
+      "default": "h1"
+    },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Nuestro equipo está listo para ayudarte a hacerlo realidad. Solicita un presupuesto sin compromiso.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Solicitar presupuesto" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color_background", "id": "background", "label": "Background" },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#ff007a" }
+  ],
+  "presets": [{ "name": "Rich text" }],
+  "enabled_on": { "templates": ["*"] }
+}
+{% endschema %}

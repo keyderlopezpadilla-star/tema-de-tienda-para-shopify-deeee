@@ -1,0 +1,79 @@
+{%- comment -%}
+  Filter + sort form for collections/search. Enhanced by assets/facets.js.
+  Params: results (collection or search), enable_filtering, enable_sorting
+{%- endcomment -%}
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+-%}
+<form data-facets-form>
+  {%- comment -%} Preserve q/type for search results {%- endcomment -%}
+  {%- if results.terms -%}
+    <input type="hidden" name="q" value="{{ results.terms | escape }}">
+    <input type="hidden" name="type" value="product">
+  {%- endif -%}
+
+  <div class="facets" data-facets-toolbar>
+    {%- if enable_filtering and results.filters.size > 0 -%}
+      <button type="button" class="facets__toggle" data-facets-open aria-expanded="false" aria-controls="FacetsPanel">
+        {% render 'icon', name: 'sparkles' %} {{ 'products.facets.filter' | t }}
+      </button>
+    {%- endif -%}
+
+    <div class="active-facets">
+      {%- for filter in results.filters -%}
+        {%- for value in filter.active_values -%}
+          <a href="{{ value.url_to_remove }}" class="active-facet" data-facet-link>
+            {{ value.label }} {% render 'icon', name: 'close', class: 'icon' %}
+          </a>
+        {%- endfor -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+            <a href="{{ filter.url_to_remove }}" class="active-facet" data-facet-link>{{ 'products.facets.price' | t }} {% render 'icon', name: 'close', class: 'icon' %}</a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <span class="text-muted mono" style="font-size:.82rem;margin-left:auto" data-facets-count>{{ 'products.facets.results' | t: count: results.products_count }}</span>
+
+    {%- if enable_sorting -%}
+      <label class="field" style="flex-direction:row;align-items:center;gap:.5rem">
+        <span class="visually-hidden">{{ 'products.facets.sort_by' | t }}</span>
+        <select name="sort_by" class="select" style="width:auto;padding:.5rem 2rem .5rem 1rem">
+          {%- for option in results.sort_options -%}
+            <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+      </label>
+    {%- endif -%}
+  </div>
+
+  {%- if enable_filtering and results.filters.size > 0 -%}
+    <div class="facets__panel" id="FacetsPanel" data-facets-filters>
+      {%- for filter in results.filters -%}
+        <div class="facet">
+          <p class="footer__col-title">{{ filter.label }}</p>
+          {%- case filter.type -%}
+            {%- when 'list', 'boolean' -%}
+              <div class="facet__values">
+                {%- for value in filter.values -%}
+                  <label class="facet__value">
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                    <span>{{ value.label }} <span class="text-faint">({{ value.count }})</span></span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            {%- when 'price_range' -%}
+              <div class="cluster" style="--gap:.5rem">
+                <input class="input" type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="{{ 'products.facets.from' | t }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" style="width:6rem">
+                <input class="input" type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ 'products.facets.to' | t }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" style="width:6rem">
+              </div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+      <div style="grid-column:1/-1">
+        <a href="{{ results.url | default: request.path }}" class="link-underline" data-facet-link>{{ 'products.facets.clear_all' | t }}</a>
+      </div>
+    </div>
+  {%- endif -%}
+</form>

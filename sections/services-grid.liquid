@@ -1,0 +1,116 @@
+{%- comment -%} DEEE TODO — Services / feature cards grid with icons and hover glow. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" data-accent-shift="{{ s.accent }}">
+  <div class="container">
+    {% render 'section-header',
+      eyebrow: s.eyebrow,
+      heading: s.heading,
+      text: s.subheading,
+      alignment: s.header_alignment,
+      split: true %}
+
+    <div class="grid" style="--gap:1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, {{ s.min_card_width }}px), 1fr)); margin-top: 3rem">
+      {%- for block in section.blocks -%}
+        <article
+          class="card {% if settings.card_glow %}glow-ring{% endif %}"
+          style="padding: 1.75rem; display:flex; flex-direction:column; gap:1rem"
+          {{ block.shopify_attributes }}
+          {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}
+        >
+          {%- if block.settings.image != blank -%}
+            <div class="media ratio-landscape" style="border-radius:var(--radius); margin:-1.75rem -1.75rem .5rem">
+              {% render 'responsive-image', image: block.settings.image, ratio: 'landscape', sizes: '(min-width:990px) 30vw, 90vw' %}
+            </div>
+          {%- else -%}
+            <div style="width:3.25rem;height:3.25rem;display:grid;place-items:center;border-radius:var(--radius);background:var(--gradient-brand);color:#fff;font-size:1.5rem">
+              {%- if block.settings.emoji != blank -%}{{ block.settings.emoji }}{%- else -%}{% render 'icon', name: block.settings.icon, class: 'icon icon--lg' %}{%- endif -%}
+            </div>
+          {%- endif -%}
+
+          <h3 class="h3" style="font-size:1.25rem">{{ block.settings.title }}</h3>
+          <p class="text-muted">{{ block.settings.description }}</p>
+
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="link-underline mono" style="margin-top:auto;font-size:.85rem;color:var(--color-neon-cyan)">
+              {{ block.settings.link_label | default: 'Ver más' }} →
+            </a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if s.button_label != blank -%}
+      <div class="text-center" style="margin-top:3rem">
+        <a class="btn btn--primary btn--lg" href="{{ s.button_link }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+          <span class="btn__label">{{ s.button_label }} {% render 'icon', name: 'arrow-right' %}</span>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Services grid",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Nuestros servicios" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "No somos una copistería más, somos tu fábrica de ideas" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Tecnología de última generación y años de experiencia al servicio de tu creatividad." },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header alignment",
+      "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" } ],
+      "default": "center"
+    },
+    { "type": "range", "id": "min_card_width", "label": "Min card width", "min": 220, "max": 380, "step": 20, "unit": "px", "default": 280 },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#b300ff" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Solicitar presupuesto gratis" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image (optional)" },
+        { "type": "text", "id": "emoji", "label": "Emoji (optional)", "default": "🖨️" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon (if no emoji)",
+          "options": [
+            { "value": "printer", "label": "Printer" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "star", "label": "Star" }
+          ],
+          "default": "printer"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Impresión DTF" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Tecnología de impresión directa sobre textil. Colores vibrantes y durabilidad excepcional." },
+        { "type": "text", "id": "link_label", "label": "Link label", "default": "Ver más" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Services grid",
+      "blocks": [
+        { "type": "service", "settings": { "emoji": "🖨️", "title": "Impresión DTF", "description": "Impresión directa sobre textil de última generación. Colores vibrantes y durabilidad excepcional." } },
+        { "type": "service", "settings": { "emoji": "✨", "title": "Impresión UV", "description": "Sobre cualquier superficie: madera, metal, cristal, plástico. Resistente a UV y agua." } },
+        { "type": "service", "settings": { "emoji": "🎨", "title": "Sublimación", "description": "Personalización de textiles, tazas, cojines y más. Colores vivos que no se desgastan." } },
+        { "type": "service", "settings": { "emoji": "📣", "title": "Cartelería", "description": "Carteles, banners y vinilos de gran formato. Perfectos para eventos y tiendas." } },
+        { "type": "service", "settings": { "emoji": "🚗", "title": "Vinilos", "description": "Vinilos decorativos, rotulación de vehículos y escaparates de alta calidad." } },
+        { "type": "service", "settings": { "emoji": "🎁", "title": "Regalos personalizados", "description": "Crea regalos únicos y memorables. Tazas, camisetas, cojines, calendarios y mucho más." } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index", "page"] }
+}
+{% endschema %}

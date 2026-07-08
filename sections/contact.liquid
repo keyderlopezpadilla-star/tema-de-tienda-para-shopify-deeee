@@ -1,0 +1,102 @@
+{%- comment -%} DEEE TODO — Contact section with form + info blocks. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" id="contact" data-accent-shift="{{ s.accent }}">
+  <div class="container">
+    <div class="grid" style="--gap:clamp(1.5rem,5vw,3.5rem);grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="stack" style="--stack:1.5rem">
+        {% render 'section-header', eyebrow: s.eyebrow, heading: s.heading, text: s.subheading, alignment: 'left', split: true %}
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'info' -%}
+            <div class="cluster" style="--gap:1rem;align-items:flex-start" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+              <span style="color:var(--color-neon-cyan);margin-top:.15rem">{% render 'icon', name: block.settings.icon %}</span>
+              <div>
+                <div style="font-weight:600">{{ block.settings.title }}</div>
+                <div class="text-muted" style="font-size:.95rem">{{ block.settings.text }}</div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div class="card" style="padding:clamp(1.5rem,4vw,2.5rem)" {% if settings.scroll_reveal %}data-reveal{% endif %}>
+        {%- form 'contact', class: 'stack', novalidate: 'novalidate' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="form-status form-status--success">{{ 'sections.contact.success' | t }}</p>
+          {%- elsif form.errors -%}
+            <p class="form-status form-status--error">{{ form.errors | default_errors }}</p>
+          {%- endif -%}
+          <div class="grid" style="--gap:1rem;grid-template-columns:1fr 1fr">
+            <div class="field">
+              <label class="field__label" for="ContactName">{{ 'sections.contact.name' | t }}</label>
+              <input class="input" id="ContactName" type="text" name="contact[name]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" required>
+            </div>
+            <div class="field">
+              <label class="field__label" for="ContactPhone">{{ 'sections.contact.phone' | t }}</label>
+              <input class="input" id="ContactPhone" type="tel" name="contact[phone]" value="{{ form.phone }}">
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="ContactEmail">{{ 'sections.contact.email' | t }}</label>
+            <input class="input" id="ContactEmail" type="email" name="contact[email]" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required autocorrect="off" autocapitalize="off">
+          </div>
+          <div class="field">
+            <label class="field__label" for="ContactMessage">{{ 'sections.contact.message' | t }}</label>
+            <textarea class="textarea" id="ContactMessage" name="contact[body]" required>{{ form.body }}</textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--lg btn--full" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+            <span class="btn__label">{{ 'sections.contact.send' | t }} {% render 'icon', name: 'arrow-right' %}</span>
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Hablemos" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Hablemos de tu proyecto" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Estamos aquí para ayudarte. Visítanos, llámanos o envíanos un mensaje." },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#3080ff" }
+  ],
+  "blocks": [
+    {
+      "type": "info",
+      "name": "Info item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Truck" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "user", "label": "User" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "heart", "label": "Heart" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Dirección" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Carrer de la Muntanya, 11 · 46680 Algemesí, Valencia" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact",
+      "blocks": [
+        { "type": "info", "settings": { "icon": "sparkles", "title": "Dirección", "text": "Carrer de la Muntanya, 11 · 46680 Algemesí, Valencia" } },
+        { "type": "info", "settings": { "icon": "shield", "title": "Horario", "text": "L–V 9:30–14:00 · 17:00–20:00 · Sábado 9:30–14:00" } },
+        { "type": "info", "settings": { "icon": "truck", "title": "Envíos", "text": "Express 24-48h a toda España con seguimiento" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index", "page"] }
+}
+{% endschema %}

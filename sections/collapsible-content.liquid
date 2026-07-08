@@ -1,0 +1,63 @@
+{%- comment -%} DEEE TODO — FAQ / collapsible content accordion. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section" data-accent-shift="{{ s.accent }}">
+  <div class="container container--narrow">
+    {% render 'section-header', eyebrow: s.eyebrow, heading: s.heading, alignment: 'center', split: true %}
+
+    <div class="accordion" data-accordion-single style="margin-top:2.5rem">
+      {%- for block in section.blocks -%}
+        <div class="accordion__item" {{ block.shopify_attributes }} {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+          <button
+            class="accordion__trigger"
+            type="button"
+            data-accordion-trigger
+            aria-expanded="{% if forloop.first and s.open_first %}true{% else %}false{% endif %}"
+            id="AccTrigger-{{ section.id }}-{{ forloop.index }}"
+            aria-controls="AccPanel-{{ section.id }}-{{ forloop.index }}"
+          >
+            <span>{{ block.settings.question }}</span>
+            <span class="accordion__icon">{% render 'icon', name: 'plus' %}</span>
+          </button>
+          <div class="accordion__panel" id="AccPanel-{{ section.id }}-{{ forloop.index }}" role="region" aria-labelledby="AccTrigger-{{ section.id }}-{{ forloop.index }}">
+            <div><div class="accordion__body rte">{{ block.settings.answer }}</div></div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collapsible content",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "FAQ" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Preguntas frecuentes" },
+    { "type": "checkbox", "id": "open_first", "label": "Open first item", "default": true },
+    { "type": "color", "id": "accent", "label": "Ambient accent", "default": "#00f0ff" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "¿En cuánto tiempo recibo mi pedido?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>La mayoría de pedidos están listos en 24-48h. El envío express llega a toda España en 24-48h con seguimiento.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible content",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item", "settings": { "question": "¿Puedo subir mi propio diseño?", "answer": "<p>¡Claro! Sube tu archivo o cuéntanos tu idea y nosotros ponemos la tinta, el papel y las ganas.</p>" } },
+        { "type": "item", "settings": { "question": "¿Qué materiales usáis?", "answer": "<p>Materiales premium y tecnología de última generación en todos nuestros servicios.</p>" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["*"] }
+}
+{% endschema %}

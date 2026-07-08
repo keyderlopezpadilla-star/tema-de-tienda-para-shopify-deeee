@@ -1,0 +1,61 @@
+{%- comment -%}
+  Responsive image with srcset (Shopify CDN auto-serves WebP/AVIF), lazy loading,
+  aspect-ratio and fade-in. The CDN handles next-gen formats automatically.
+
+  Params:
+    image (required)  - image object
+    sizes             - sizes attribute (default 100vw)
+    widths            - comma list of widths
+    ratio             - portrait|square|landscape|wide|natural
+    class             - extra classes on wrapper
+    loading           - lazy|eager (default lazy)
+    fetchpriority     - high|low|auto
+    alt               - override alt text
+{%- endcomment -%}
+{%- liquid
+  assign img = image
+  assign img_sizes = sizes | default: '100vw'
+  assign img_widths = widths | default: '320, 480, 640, 800, 1000, 1200, 1600, 2000'
+  assign img_loading = loading | default: 'lazy'
+  assign fetch = fetchpriority | default: 'auto'
+  assign wrap_class = class | default: ''
+  assign ratio_class = ''
+  case ratio
+    when 'square'
+      assign ratio_class = 'ratio-square'
+    when 'landscape'
+      assign ratio_class = 'ratio-landscape'
+    when 'wide'
+      assign ratio_class = 'ratio-wide'
+    when 'portrait'
+      assign ratio_class = 'ratio-portrait'
+  endcase
+  assign alt_text = alt | default: img.alt | escape
+-%}
+{%- if img != blank -%}
+  {%- comment -%} Only fade lazy images; eager images render immediately. {%- endcomment -%}
+  {%- assign fade_class = 'media--fade' -%}
+  {%- assign img_class = '' -%}
+  {%- if img_loading == 'eager' -%}
+    {%- assign fade_class = '' -%}
+    {%- assign img_class = 'is-loaded' -%}
+  {%- endif -%}
+  <div class="media {{ fade_class }} {{ ratio_class }} {{ wrap_class }}">
+    {{
+      img
+      | image_url: width: 2000
+      | image_tag:
+        loading: img_loading,
+        fetchpriority: fetch,
+        sizes: img_sizes,
+        widths: img_widths,
+        alt: alt_text,
+        class: img_class,
+        decoding: 'async'
+    }}
+  </div>
+{%- else -%}
+  <div class="media {{ ratio_class }} {{ wrap_class }}">
+    {{ placeholder | default: 'product-1' | placeholder_svg_tag: 'placeholder' }}
+  </div>
+{%- endif -%}

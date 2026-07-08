@@ -1,0 +1,64 @@
+{%- comment -%} DEEE TODO — Single blog article. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+-%}
+<article class="section">
+  <div class="container container--narrow">
+    <a href="{{ blog.url }}" class="mono text-muted link-underline" style="font-size:.82rem">← {{ 'blogs.article.back' | t }}</a>
+    <header class="stack" style="--stack:1rem;margin:1.5rem 0 2.5rem;text-align:center;align-items:center">
+      <span class="eyebrow">{{ article.published_at | date: '%d %B %Y' }}</span>
+      <h1 class="h1" data-split>{{ article.title }}</h1>
+      {%- if s.show_author -%}<p class="text-muted mono" style="font-size:.85rem">{{ 'blogs.article.by' | t: author: article.author }}</p>{%- endif -%}
+    </header>
+
+    {%- if article.image and s.show_image -%}
+      <div class="media ratio-wide" style="border-radius:var(--radius-xl);overflow:hidden;margin-bottom:2.5rem" data-scroll-zoom>
+        {% render 'responsive-image', image: article.image, ratio: 'wide', sizes: '(min-width:990px) 52rem, 100vw', loading: 'eager', fetchpriority: 'high' %}
+      </div>
+    {%- endif -%}
+
+    <div class="rte">{{ article.content }}</div>
+
+    {%- if article.tags.size > 0 -%}
+      <div class="pill-group" style="margin-top:2rem">
+        {%- for tag in article.tags -%}<span class="badge badge--neon">#{{ tag }}</span>{%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if blog.comments_enabled? -%}
+      <div style="margin-top:3rem">
+        <h2 class="h3" style="margin-bottom:1.5rem">{{ 'blogs.article.comments' | t }} ({{ article.comments_count }})</h2>
+        {%- if article.comments_count > 0 -%}
+          {%- for comment in article.comments -%}
+            <div class="card" style="padding:1.25rem;margin-bottom:1rem">
+              <div class="cluster" style="justify-content:space-between"><strong>{{ comment.author }}</strong><span class="text-faint mono" style="font-size:.8rem">{{ comment.created_at | date: '%d %b %Y' }}</span></div>
+              <div class="rte text-muted" style="margin-top:.5rem">{{ comment.content }}</div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+
+        {%- form 'new_comment', article, class: 'card stack' -%}
+          <div style="padding:1.5rem;display:grid;gap:1rem">
+            {%- if form.posted_successfully? -%}<p class="form-status form-status--success">✔</p>{%- endif -%}
+            <div class="grid" style="grid-template-columns:1fr 1fr;gap:1rem">
+              <input class="input" name="comment[author]" placeholder="{{ 'sections.contact.name' | t }}" required>
+              <input class="input" name="comment[email]" type="email" placeholder="{{ 'sections.contact.email' | t }}" required>
+            </div>
+            <textarea class="textarea" name="comment[body]" placeholder="{{ 'sections.contact.message' | t }}" required></textarea>
+            <button class="btn btn--primary" type="submit"><span class="btn__label">{{ 'blogs.article.comments' | t }}</span></button>
+          </div>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": [
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
+    { "type": "checkbox", "id": "show_image", "label": "Show featured image", "default": true }
+  ]
+}
+{% endschema %}

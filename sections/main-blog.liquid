@@ -1,0 +1,46 @@
+{%- comment -%} DEEE TODO — Blog article listing. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  paginate blog.articles by s.posts_per_page
+-%}
+<section class="section">
+  <div class="container">
+    <h1 class="display" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:2.5rem" data-split>{{ blog.title }}</h1>
+    <div class="product-grid product-grid--{{ s.columns }}">
+      {%- for article in blog.articles -%}
+        <article class="card {% if settings.card_glow %}glow-ring{% endif %}" {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
+          <a href="{{ article.url }}" class="media ratio-landscape" style="display:block">
+            {%- if article.image -%}
+              {% render 'responsive-image', image: article.image, ratio: 'landscape', sizes: '(min-width:990px) 33vw, 90vw' %}
+            {%- else -%}
+              {{ 'blog-apparel-1' | placeholder_svg_tag: 'placeholder' }}
+            {%- endif -%}
+          </a>
+          <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.6rem">
+            <span class="product-card__vendor">{{ article.published_at | date: '%d %b %Y' }}{% if article.tags.size > 0 %} · {{ article.tags.first }}{% endif %}</span>
+            <h2 class="h3" style="font-size:1.25rem"><a href="{{ article.url }}" class="link-underline">{{ article.title }}</a></h2>
+            <p class="text-muted">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+            <a href="{{ article.url }}" class="mono" style="color:var(--color-neon-cyan);font-size:.85rem;margin-top:auto">{{ 'blogs.article.read_more' | t }} →</a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+    {% render 'pagination', paginate: paginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "settings": [
+    { "type": "range", "id": "posts_per_page", "label": "Posts per page", "min": 3, "max": 24, "step": 3, "default": 9 },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [ { "value": "3", "label": "3" }, { "value": "4", "label": "4" } ],
+      "default": "3"
+    }
+  ]
+}
+{% endschema %}

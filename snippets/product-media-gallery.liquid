@@ -1,0 +1,49 @@
+{%- comment -%}
+  Product media gallery with main stage + thumbnails. Enhanced by product-form.js.
+  Params: product
+{%- endcomment -%}
+{%- liquid
+  assign featured = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+-%}
+<div class="product__gallery" data-parallax-scope>
+  <div class="product__media-main media" data-gallery-main>
+    {%- if featured -%}
+      <img
+        src="{{ featured | image_url: width: 1200 }}"
+        srcset="{{ featured | image_url: width: 600 }} 600w, {{ featured | image_url: width: 1000 }} 1000w, {{ featured | image_url: width: 1600 }} 1600w"
+        sizes="(min-width: 990px) 55vw, 100vw"
+        alt="{{ featured.alt | default: product.title | escape }}"
+        width="1200"
+        height="1200"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      >
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+  </div>
+
+  {%- if product.media.size > 1 -%}
+    <div class="product__thumbs" role="list">
+      {%- for media in product.media -%}
+        <button
+          type="button"
+          class="product__thumb {% if media.id == featured.id %}is-active{% endif %}"
+          data-gallery-thumb
+          data-media-id="{{ media.id }}"
+          aria-label="{{ media.alt | default: product.title | escape }}"
+        >
+          <img
+            src="{{ media.preview_image | image_url: width: 160 }}"
+            data-full="{{ media.preview_image | image_url: width: 1600 }}"
+            alt="{{ media.alt | default: product.title | escape }}"
+            width="68"
+            height="68"
+            loading="lazy"
+          >
+        </button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

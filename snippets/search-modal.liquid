@@ -1,0 +1,35 @@
+{%- comment -%}
+  Full-screen predictive search modal. Live results by assets/predictive-search.js.
+{%- endcomment -%}
+<div
+  id="SearchModal"
+  class="search-modal"
+  data-search-modal
+  data-closable
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'general.search.title' | t }}"
+>
+  <div class="search-modal__panel">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-field glass">
+      {% render 'icon', name: 'search' %}
+      <input
+        type="search"
+        name="q"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        aria-label="{{ 'general.search.title' | t }}"
+        data-predictive-input
+        {% if settings.predictive_search_enabled %}data-predictive{% endif %}
+      >
+      <input type="hidden" name="type" value="product">
+      <button class="header__icon-btn" type="button" data-close aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon', name: 'close' %}
+      </button>
+    </form>
+    <div data-predictive-results aria-live="polite"></div>
+  </div>
+</div>

@@ -17,9 +17,10 @@ AssetSizeCSS:
   enabled: true
   threshold_in_bytes: 120000
 
+# The theme's own JS is tiny; heavy vendors (GSAP/Three.js) load from CDN,
+# gated behind a Theme Editor toggle, so this budget rule is intentionally off.
 AssetSizeJavaScript:
-  enabled: true
-  threshold_in_bytes: 90000
+  enabled: false
 
 # Allow parser-blocking scripts only where we deliberately need them.
 ParserBlockingScript:

@@ -4,12 +4,10 @@
 {%- endcomment -%}
 {%- liquid
   if product.selected_or_first_available_variant
-    assign target = product
     assign variant = product.selected_or_first_available_variant
     assign price = variant.price
     assign compare = variant.compare_at_price
   else
-    assign target = product
     assign price = product.price
     assign compare = product.compare_at_price
   endif

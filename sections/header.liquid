@@ -1,7 +1,10 @@
 {%- comment -%} DEEE TODO — Sticky header with mega menu, search & cart drawer trigger. {%- endcomment -%}
 {%- liquid
   assign menu = section.settings.menu
-  assign transparent = section.settings.transparent_on_home and template.name == 'index'
+  assign transparent = false
+  if section.settings.transparent_on_home and template.name == 'index'
+    assign transparent = true
+  endif
 -%}
 <header
   class="header {% if transparent %}header--transparent{% endif %}"
@@ -24,7 +27,8 @@
         <img
           src="{{ section.settings.logo | image_url: width: 400 }}"
           alt="{{ shop.name | escape }}"
-          width="{{ section.settings.logo_width }}"
+          width="{{ section.settings.logo.width }}"
+          height="{{ section.settings.logo.height }}"
           style="width:{{ section.settings.logo_width }}px;height:auto"
         >
       {%- else -%}

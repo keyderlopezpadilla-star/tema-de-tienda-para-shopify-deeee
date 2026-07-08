@@ -35,10 +35,11 @@
 
     {%- comment -%} Typography — Geist via Shopify Fonts fallback friendly {%- endcomment -%}
     {%- unless settings.type_body_font.system? -%}
-      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+      {{ settings.type_body_font | font_url | preload_tag: as: 'font' }}
     {%- endunless -%}
 
-    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'base.css' | asset_url | preload_tag: as: 'style' }}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'components.css' | asset_url | stylesheet_tag }}
 
     <script>
@@ -129,7 +130,7 @@
     {%- if settings.animations_enabled -%}
       <script src="{{ 'animations.js' | asset_url }}" defer></script>
       {%- if settings.enable_3d_hero -%}
-        <script src="https://cdn.jsdelivr.net/npm/three@0.172.0/build/three.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
         <script src="{{ 'three-scene.js' | asset_url }}" defer></script>
       {%- endif -%}
     {%- endif -%}

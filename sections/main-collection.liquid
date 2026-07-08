@@ -1,8 +1,5 @@
 {%- comment -%} DEEE TODO — Collection page with AJAX facets, sorting & infinite scroll. {%- endcomment -%}
-{%- liquid
-  assign s = section.settings
-  paginate collection.products by s.products_per_page
--%}
+{%- assign s = section.settings -%}
 <section
   class="section"
   data-facets-container
@@ -33,6 +30,7 @@
       {% render 'facets', results: collection, enable_filtering: s.enable_filtering, enable_sorting: s.enable_sorting %}
     {%- endif -%}
 
+    {%- paginate collection.products by s.products_per_page -%}
     {%- if collection.products.size > 0 -%}
       <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid style="margin-top:1.5rem">
         {%- for product in collection.products -%}
@@ -56,6 +54,7 @@
         <p class="h3">{{ 'sections.collection.empty' | t }}</p>
       </div>
     {%- endif -%}
+    {%- endpaginate -%}
   </div>
 </section>
 

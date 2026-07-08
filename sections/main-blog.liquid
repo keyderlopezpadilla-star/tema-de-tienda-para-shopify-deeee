@@ -1,11 +1,9 @@
 {%- comment -%} DEEE TODO — Blog article listing. {%- endcomment -%}
-{%- liquid
-  assign s = section.settings
-  paginate blog.articles by s.posts_per_page
--%}
+{%- assign s = section.settings -%}
 <section class="section">
   <div class="container">
     <h1 class="display" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:2.5rem" data-split>{{ blog.title }}</h1>
+    {%- paginate blog.articles by s.posts_per_page -%}
     <div class="product-grid product-grid--{{ s.columns }}">
       {%- for article in blog.articles -%}
         <article class="card {% if settings.card_glow %}glow-ring{% endif %}" {% if settings.scroll_reveal %}data-reveal data-reveal-stagger{% endif %}>
@@ -26,6 +24,7 @@
       {%- endfor -%}
     </div>
     {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
   </div>
 </section>
 

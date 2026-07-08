@@ -52,11 +52,14 @@
   "url": {{ shop.url | append: routes.root_url | json }},
   {% if settings.logo %}"logo": "https:{{ settings.logo | image_url: width: 400 }}",{% endif %}
   "sameAs": [
-    {%- assign socials = '' -%}
-    {%- if settings.social_instagram != blank %}{{ settings.social_instagram | json }},{% endif -%}
-    {%- if settings.social_facebook != blank %}{{ settings.social_facebook | json }},{% endif -%}
-    {%- if settings.social_tiktok != blank %}{{ settings.social_tiktok | json }},{% endif -%}
-    {%- if settings.social_youtube != blank %}{{ settings.social_youtube | json }}{% endif -%}
+    {%- assign social_links = '' -%}
+    {%- if settings.social_instagram != blank %}{%- assign social_links = social_links | append: settings.social_instagram | append: '||' -%}{% endif -%}
+    {%- if settings.social_facebook != blank %}{%- assign social_links = social_links | append: settings.social_facebook | append: '||' -%}{% endif -%}
+    {%- if settings.social_tiktok != blank %}{%- assign social_links = social_links | append: settings.social_tiktok | append: '||' -%}{% endif -%}
+    {%- if settings.social_youtube != blank %}{%- assign social_links = social_links | append: settings.social_youtube | append: '||' -%}{% endif -%}
+    {%- if settings.social_x != blank %}{%- assign social_links = social_links | append: settings.social_x | append: '||' -%}{% endif -%}
+    {%- assign social_arr = social_links | split: '||' -%}
+    {%- for link in social_arr -%}{{ link | json }}{%- unless forloop.last %},{% endunless -%}{%- endfor -%}
   ]
 }
 </script>

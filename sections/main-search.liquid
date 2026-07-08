@@ -1,8 +1,5 @@
 {%- comment -%} DEEE TODO — Search results page. {%- endcomment -%}
-{%- liquid
-  assign s = section.settings
-  paginate search.results by s.results_per_page
--%}
+{%- assign s = section.settings -%}
 <section
   class="section"
   data-facets-container
@@ -21,6 +18,7 @@
     </form>
 
     {%- if search.performed -%}
+      {%- paginate search.results by s.results_per_page -%}
       {%- if search.results.size > 0 -%}
         <div class="cluster" style="justify-content:space-between;margin-bottom:1rem">
           <p class="text-muted">{{ 'general.search.results_for' | t: terms: search.terms }}</p>
@@ -43,6 +41,7 @@
       {%- else -%}
         <div class="cart-empty"><p class="h3">{{ 'general.search.no_results_html' | t: terms: search.terms }}</p></div>
       {%- endif -%}
+      {%- endpaginate -%}
     {%- endif -%}
   </div>
 </section>

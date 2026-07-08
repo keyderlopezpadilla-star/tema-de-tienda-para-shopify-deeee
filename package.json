@@ -39,7 +39,7 @@
     "motion": "^11.16.0",
     "split-type": "^0.3.4",
     "swiper": "^11.2.1",
-    "three": "^0.172.0"
+    "three": "^0.160.0"
   },
   "browserslist": [
     "last 2 versions",

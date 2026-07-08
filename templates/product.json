@@ -3,16 +3,39 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": { "type": "vendor" },
-        "title": { "type": "title" },
-        "rating": { "type": "rating" },
-        "price": { "type": "price" },
-        "short": { "type": "description_short" },
-        "variants": { "type": "variant_picker" },
-        "buy": { "type": "buy_buttons" },
-        "stock": { "type": "stock" },
-        "icons": { "type": "icons", "settings": { "items": "Calidad premium\nEnvío 24-48h\nPago seguro SSL\nHecho en Algemesí" } },
-        "description": { "type": "description" },
+        "vendor": {
+          "type": "vendor"
+        },
+        "title": {
+          "type": "title"
+        },
+        "rating": {
+          "type": "rating"
+        },
+        "price": {
+          "type": "price"
+        },
+        "short": {
+          "type": "description_short"
+        },
+        "variants": {
+          "type": "variant_picker"
+        },
+        "buy": {
+          "type": "buy_buttons"
+        },
+        "stock": {
+          "type": "stock"
+        },
+        "icons": {
+          "type": "icons",
+          "settings": {
+            "items": "Calidad premium\nEnvío 24-48h\nPago seguro SSL\nHecho en Algemesí"
+          }
+        },
+        "description": {
+          "type": "description"
+        },
         "shipping": {
           "type": "collapsible",
           "settings": {
@@ -20,7 +43,9 @@
             "content": "<p>Envío express 24-48h a toda España. Devoluciones sencillas en 14 días.</p>"
           }
         },
-        "share": { "type": "share" }
+        "share": {
+          "type": "share"
+        }
       },
       "block_order": [
         "vendor",
@@ -48,5 +73,8 @@
       }
     }
   },
-  "order": ["main", "recommendations"]
+  "order": [
+    "main",
+    "recommendations"
+  ]
 }

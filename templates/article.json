@@ -2,8 +2,13 @@
   "sections": {
     "main": {
       "type": "main-article",
-      "settings": { "show_author": true, "show_image": true }
+      "settings": {
+        "show_author": true,
+        "show_image": true
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

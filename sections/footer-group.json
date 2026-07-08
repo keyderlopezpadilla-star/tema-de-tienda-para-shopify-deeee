@@ -7,11 +7,17 @@
       "blocks": {
         "shop": {
           "type": "menu",
-          "settings": { "heading": "Tienda", "menu": "footer" }
+          "settings": {
+            "heading": "Tienda",
+            "menu": "footer"
+          }
         },
         "help": {
           "type": "menu",
-          "settings": { "heading": "Ayuda", "menu": "footer" }
+          "settings": {
+            "heading": "Ayuda",
+            "menu": "footer"
+          }
         },
         "contact": {
           "type": "text",
@@ -21,7 +27,11 @@
           }
         }
       },
-      "block_order": ["shop", "help", "contact"],
+      "block_order": [
+        "shop",
+        "help",
+        "contact"
+      ],
       "settings": {
         "tagline": "Tu copistería de barrio en Algemesí, pero con superpoderes. Si lo puedes imaginar, lo imprimimos.",
         "enable_newsletter": true,
@@ -30,5 +40,7 @@
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

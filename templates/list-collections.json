@@ -2,8 +2,14 @@
   "sections": {
     "main": {
       "type": "main-list-collections",
-      "settings": { "heading": "Colecciones", "columns": "3", "sort": "default" }
+      "settings": {
+        "heading": "Colecciones",
+        "columns": "3",
+        "sort": "default"
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

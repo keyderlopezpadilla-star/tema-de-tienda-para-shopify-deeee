@@ -13,11 +13,36 @@
     "contact": {
       "type": "contact",
       "blocks": {
-        "i1": { "type": "info", "settings": { "icon": "sparkles", "title": "Dirección", "text": "Carrer de la Muntanya, 11 · 46680 Algemesí, Valencia" } },
-        "i2": { "type": "info", "settings": { "icon": "shield", "title": "Horario", "text": "L–V 9:30–14:00 · 17:00–20:00 · Sábado 9:30–14:00 · Domingo cerrado" } },
-        "i3": { "type": "info", "settings": { "icon": "truck", "title": "Envíos", "text": "Express 24-48h a toda España con seguimiento en tiempo real" } }
+        "i1": {
+          "type": "info",
+          "settings": {
+            "icon": "sparkles",
+            "title": "Dirección",
+            "text": "Carrer de la Muntanya, 11 · 46680 Algemesí, Valencia"
+          }
+        },
+        "i2": {
+          "type": "info",
+          "settings": {
+            "icon": "shield",
+            "title": "Horario",
+            "text": "L–V 9:30–14:00 · 17:00–20:00 · Sábado 9:30–14:00 · Domingo cerrado"
+          }
+        },
+        "i3": {
+          "type": "info",
+          "settings": {
+            "icon": "truck",
+            "title": "Envíos",
+            "text": "Express 24-48h a toda España con seguimiento en tiempo real"
+          }
+        }
       },
-      "block_order": ["i1", "i2", "i3"],
+      "block_order": [
+        "i1",
+        "i2",
+        "i3"
+      ],
       "settings": {
         "eyebrow": "Contacto",
         "heading": "Hablemos de tu proyecto",
@@ -26,5 +51,8 @@
       }
     }
   },
-  "order": ["banner", "contact"]
+  "order": [
+    "banner",
+    "contact"
+  ]
 }

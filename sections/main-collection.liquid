@@ -13,16 +13,22 @@
       {%- if s.show_banner_image and collection.image -%}
         <div class="media ratio-wide overflow-clip" style="border-radius:var(--radius-xl);position:relative" data-scroll-zoom>
           {% render 'responsive-image', image: collection.image, ratio: 'wide', sizes: '100vw', loading: 'eager', fetchpriority: 'high' %}
-          <div style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(var(--color-bg-rgb),.85), rgba(var(--color-bg-rgb),.2));display:flex;align-items:flex-end;padding:clamp(1.5rem,4vw,3rem)">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(var(--color-bg-rgb),.9), rgba(var(--color-bg-rgb),.2));display:flex;align-items:flex-end;padding:clamp(1.5rem,4vw,3rem)">
             <div>
+              <nav class="collection-hero__breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}" class="link-underline">Inicio</a> / <span>{{ collection.title }}</span></nav>
               <h1 class="display" style="font-size:clamp(2rem,5vw,3.5rem)" data-split>{{ collection.title }}</h1>
               {%- if collection.description != blank and s.show_description -%}<div class="lead">{{ collection.description | strip_html | truncatewords: 30 }}</div>{%- endif -%}
+              <span class="badge collection-hero__count">{{ collection.all_products_count }} productos</span>
             </div>
           </div>
         </div>
       {%- else -%}
-        <h1 class="display" style="font-size:clamp(2rem,5vw,3.5rem)" data-split>{{ collection.title | default: 'Productos' }}</h1>
-        {%- if collection.description != blank and s.show_description -%}<div class="lead" style="margin-top:1rem">{{ collection.description }}</div>{%- endif -%}
+        <div class="collection-hero" data-reveal>
+          <nav class="collection-hero__breadcrumb" aria-label="Breadcrumb"><a href="{{ routes.root_url }}" class="link-underline">Inicio</a> / <span>{{ collection.title | default: 'Productos' }}</span></nav>
+          <h1 class="display" style="font-size:clamp(2rem,5vw,3.5rem)" data-split>{{ collection.title | default: 'Productos' }}</h1>
+          {%- if collection.description != blank and s.show_description -%}<div class="lead" style="margin-top:1rem">{{ collection.description }}</div>{%- endif -%}
+          <span class="badge collection-hero__count">{% render 'icon', name: 'sparkles' %} {{ collection.all_products_count }} productos</span>
+        </div>
       {%- endif -%}
     </div>
 
@@ -32,9 +38,9 @@
 
     {%- paginate collection.products by s.products_per_page -%}
     {%- if collection.products.size > 0 -%}
-      <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid style="margin-top:1.5rem">
+      <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid data-scroll-3d style="margin-top:1.5rem">
         {%- for product in collection.products -%}
-          {% render 'product-card', product: product, reveal: settings.scroll_reveal, image_ratio: s.image_ratio %}
+          {% render 'product-card', product: product, reveal: false, tilt: true, image_ratio: s.image_ratio %}
         {%- endfor -%}
       </div>
 

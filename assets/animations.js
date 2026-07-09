@@ -10,6 +10,7 @@
 
   const { qs, qsa, reduceMotion } = window.DEEE.utils;
   const motionEnabled = document.documentElement.dataset.motion !== 'off' && !reduceMotion;
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* --------------------------------------------------------------------- */
   /* 1. Smooth scroll (Lenis)                                              */
@@ -155,10 +156,67 @@
         }
       });
     });
+
+    /* 9. Immersive 3D scroll reveal for card rows / grids.
+       Children of [data-scroll-3d] flip up from depth as the row enters.
+       Idempotent so it also runs on AJAX-filtered grids. */
+    function init3DScroll(scope) {
+      (scope || document).querySelectorAll('[data-scroll-3d]:not([data-3d-ready])').forEach((row) => {
+        row.setAttribute('data-3d-ready', '');
+        const items = Array.from(row.children);
+        if (!items.length) return;
+        gsap.set(row, { perspective: 1300 });
+        gsap.set(items, { transformStyle: 'preserve-3d' });
+        gsap.fromTo(
+          items,
+          { rotateX: 28, y: 90, z: -180, opacity: 0, transformOrigin: '50% 100%' },
+          {
+            rotateX: 0,
+            y: 0,
+            z: 0,
+            opacity: 1,
+            duration: 1.1,
+            ease: 'power3.out',
+            stagger: { each: 0.08, from: 'start' },
+            scrollTrigger: { trigger: row, start: 'top 88%' }
+          }
+        );
+      });
+    }
+    init3DScroll();
+
+    /* 10. Pointer-driven 3D tilt (desktop only). Idempotent. */
+    function initTilt(scope) {
+      if (!canHover) return;
+      (scope || document).querySelectorAll('[data-tilt]:not([data-tilt-ready])').forEach((el) => {
+        el.setAttribute('data-tilt-ready', '');
+        const strength = parseFloat(el.dataset.tilt) || 9;
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.transform =
+            'perspective(900px) rotateY(' + px * strength + 'deg) rotateX(' + -py * strength + 'deg) translateY(-4px)';
+        });
+        el.addEventListener('pointerleave', () => {
+          el.style.transform = '';
+        });
+      });
+    }
+    initTilt();
+
+    /* Re-run 3D + tilt after AJAX facet/collection updates. */
+    if (window.DEEE.bus) {
+      window.DEEE.bus.on('facets:updated', () => {
+        init3DScroll();
+        initTilt();
+        window.ScrollTrigger.refresh();
+      });
+    }
   }
 
   /* --------------------------------------------------------------------- */
-  /* 9. Refresh triggers once fonts + images settle                        */
+  /* 11. Refresh triggers once fonts + images settle                       */
   /* --------------------------------------------------------------------- */
   if (window.ScrollTrigger) {
     window.addEventListener('load', () => window.ScrollTrigger.refresh());

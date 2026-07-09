@@ -190,6 +190,47 @@
         "accent": "#b300ff"
       }
     },
+    "categories": {
+      "type": "category-showcase",
+      "blocks": {
+        "cat1": {
+          "type": "category",
+          "settings": {
+            "heading": "Textil personalizado",
+            "description": "Camisetas, sudaderas y más con tu diseño. Colores que aguantan lavado tras lavado.",
+            "accent": "#fb2c36"
+          }
+        },
+        "cat2": {
+          "type": "category",
+          "settings": {
+            "heading": "Papelería e impresión",
+            "description": "Fotocopias, encuadernación, tarjetas y carteles. La copistería de siempre, nivel pro.",
+            "accent": "#00f0ff"
+          }
+        },
+        "cat3": {
+          "type": "category",
+          "settings": {
+            "heading": "Regalos y detalles",
+            "description": "Tazas, cojines, pegatinas y más. Regalos únicos que sacan sonrisas.",
+            "accent": "#b300ff"
+          }
+        }
+      },
+      "block_order": ["cat1", "cat2", "cat3"],
+      "settings": {
+        "eyebrow": "Explora por categorías",
+        "heading": "Encuentra justo lo que buscas",
+        "subheading": "Cada categoría, con su propio universo. Desliza y descubre.",
+        "header_alignment": "center",
+        "layout": "scroll",
+        "columns": "4",
+        "products_per_category": 6,
+        "link_label": "Ver categoría",
+        "accent": "#00f0ff"
+      }
+    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
@@ -377,6 +418,7 @@
     "marquee",
     "image-with-text",
     "services",
+    "categories",
     "featured-collection",
     "stats",
     "testimonials",

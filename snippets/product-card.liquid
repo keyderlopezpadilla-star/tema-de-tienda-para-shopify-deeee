@@ -12,6 +12,7 @@
   <article
     class="product-card {% if settings.card_glow %}glow-ring{% endif %}"
     {% if reveal %}data-reveal data-reveal-stagger{% endif %}
+    {% if tilt %}data-tilt="7"{% endif %}
   >
     <div class="product-card__media">
       {%- if product.featured_media -%}

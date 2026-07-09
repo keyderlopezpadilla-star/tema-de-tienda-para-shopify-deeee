@@ -22,9 +22,9 @@
     </div>
 
     {%- if collection != blank and products.size > 0 -%}
-      <div class="product-grid product-grid--{{ s.columns }}">
+      <div class="product-grid product-grid--{{ s.columns }}" data-scroll-3d>
         {%- for product in products limit: limit -%}
-          {% render 'product-card', product: product, reveal: settings.scroll_reveal %}
+          {% render 'product-card', product: product, reveal: false, tilt: true %}
         {%- endfor -%}
       </div>
     {%- else -%}

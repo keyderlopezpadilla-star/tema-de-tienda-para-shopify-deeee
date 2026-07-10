@@ -23,7 +23,7 @@
             <div style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(var(--color-bg-rgb),.8), transparent 60%);display:flex;align-items:flex-end;padding:1.25rem">
               <div>
                 <h3 class="h3" style="font-size:1.3rem">{{ collection.title }}</h3>
-                <span class="text-muted mono" style="font-size:.8rem">{{ collection.products_count }} {{ 'products.facets.price' | t | default: 'productos' | downcase }}</span>
+                <span class="text-muted mono" style="font-size:.8rem">{{ 'sections.collection.products_count' | t: count: collection.products_count }}</span>
               </div>
             </div>
           </div>

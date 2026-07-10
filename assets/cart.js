@@ -46,8 +46,8 @@
     const msg =
       remaining === 0
         ? strings.freeShipUnlocked || '¡Envío gratis desbloqueado! 🎉'
-        : (strings.freeShipRemaining || 'Te faltan {amount} para el envío gratis').replace(
-            '{amount}',
+        : (strings.freeShipRemaining || 'Te faltan %amount% para el envío gratis').replace(
+            '%amount%',
             formatMoney(remaining)
           );
     return `

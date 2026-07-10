@@ -97,7 +97,7 @@
       "empty_body": "Nothing here yet. Let's fix that!",
       "continue": "Explore products",
       "taxes_note": "Taxes and shipping calculated at checkout.",
-      "free_ship_remaining": "You're {amount} away from free shipping 🚚",
+      "free_ship_remaining": "You're %amount% away from free shipping 🚚",
       "free_ship_unlocked": "Free shipping unlocked! 🎉",
       "recommendations": "Complete your order",
       "note": "Order instructions",

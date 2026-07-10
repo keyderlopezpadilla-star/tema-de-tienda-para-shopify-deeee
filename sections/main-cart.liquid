@@ -18,7 +18,7 @@
               {{ 'cart.general.free_ship_unlocked' | t }}
             {%- else -%}
               {%- assign remaining_money = remaining | money -%}
-              {{ 'cart.general.free_ship_remaining' | t | replace: '{amount}', remaining_money }}
+              {{ 'cart.general.free_ship_remaining' | t | replace: '%amount%', remaining_money }}
             {%- endif -%}
           </p>
           <div class="free-shipping__bar"><div class="free-shipping__fill" style="width:{{ pct }}%"></div></div>

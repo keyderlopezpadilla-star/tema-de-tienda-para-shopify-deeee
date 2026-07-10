@@ -97,7 +97,7 @@
       "empty_body": "Aún no has añadido nada. ¡Vamos a por ello!",
       "continue": "Explorar productos",
       "taxes_note": "Impuestos y envío calculados en el checkout.",
-      "free_ship_remaining": "Te faltan {amount} para el envío gratis 🚚",
+      "free_ship_remaining": "Te faltan %amount% para el envío gratis 🚚",
       "free_ship_unlocked": "¡Envío gratis desbloqueado! 🎉",
       "recommendations": "Completa tu pedido",
       "note": "Instrucciones del pedido",

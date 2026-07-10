@@ -83,7 +83,9 @@
           { "value": "round", "label": "Round" }
         ],
         "default": "soft"
-      }
+      },
+      { "type": "header", "content": "Home / inicio" },
+      { "type": "text", "id": "home_redirect_url", "label": "Redirigir el inicio a", "info": "El inicio (/) envía directo aquí. Deja vacío para mostrar una home normal.", "default": "/collections/all" }
     ]
   },
   {
@@ -187,7 +189,8 @@
       { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 220, "step": 10, "unit": "px", "default": 130 },
       { "type": "image_picker", "id": "favicon", "label": "Favicon" },
       { "type": "image_picker", "id": "social_share_image", "label": "Default social share image" },
-      { "type": "text", "id": "brand_tagline", "label": "Brand tagline", "default": "Tu fábrica de ideas" }
+      { "type": "text", "id": "brand_tagline", "label": "Brand tagline", "default": "Tu fábrica de ideas" },
+      { "type": "text", "id": "brand_home_url", "label": "Enlace del logo / botón inicio", "info": "A dónde lleva el logo. Por defecto, al sitio principal.", "default": "https://deeetodo.com" }
     ]
   }
 ]

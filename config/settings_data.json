@@ -43,7 +43,9 @@
       "enable_cart_recommendations": true,
       "predictive_search_enabled": true,
       "predictive_show_price": true,
-      "brand_tagline": "Tu fábrica de ideas"
+      "brand_tagline": "Tu fábrica de ideas",
+      "home_redirect_url": "/collections/all",
+      "brand_home_url": "https://deeetodo.com"
     }
   }
 }

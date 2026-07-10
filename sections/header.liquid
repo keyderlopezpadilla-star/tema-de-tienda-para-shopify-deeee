@@ -22,7 +22,7 @@
       <span class="hamburger"><span></span><span></span><span></span></span>
     </button>
 
-    <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }}">
+    <a href="{{ settings.brand_home_url | default: routes.root_url }}" class="header__logo" aria-label="{{ shop.name }}">
       {%- if section.settings.logo != blank -%}
         <img
           src="{{ section.settings.logo | image_url: width: 400 }}"

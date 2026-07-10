@@ -1,0 +1,43 @@
+{%- comment -%}
+  DEEE TODO — The home page sends visitors straight to the catalog.
+  The instant redirect happens in layout/theme.liquid <head> (before paint).
+  This section is the graceful fallback: a loader + link, plus a <noscript>
+  meta-refresh for browsers with JavaScript disabled. Inside the theme editor
+  the auto-redirect is disabled so you can still preview/configure.
+{%- endcomment -%}
+{%- liquid
+  assign target = settings.home_redirect_url
+  if target == blank
+    assign target = routes.all_products_collection_url
+  endif
+-%}
+<noscript><meta http-equiv="refresh" content="0; url={{ target }}"></noscript>
+
+<section class="section" style="min-height:72vh;display:grid;place-items:center;text-align:center">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__blob ambient__blob--1"></div>
+    <div class="ambient__blob ambient__blob--3"></div>
+  </div>
+  <div class="container container--narrow z-1 stack" style="--stack:1.4rem;align-items:center">
+    <span class="spinner"></span>
+    <h1 class="h2" data-split>{{ section.settings.heading | default: 'Entrando al catálogo…' }}</h1>
+    <a class="btn btn--primary btn--lg" href="{{ target }}" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+      <span class="btn__label">{{ section.settings.button_label | default: 'Ver catálogo' }} {% render 'icon', name: 'arrow-right' %}</span>
+    </a>
+    {%- if request.design_mode -%}
+      <p class="text-muted" style="max-width:44ch">En el editor no se redirige automáticamente. En la tienda real, el inicio lleva directo a <strong>{{ target }}</strong>. Cámbialo en Configuración del tema → Layout → “Redirigir el inicio a”.</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Redirigir al catálogo",
+  "settings": [
+    { "type": "paragraph", "content": "El inicio redirige automáticamente al catálogo. El destino se configura en Ajustes del tema → Layout → “Redirigir el inicio a”." },
+    { "type": "text", "id": "heading", "label": "Texto mientras carga", "default": "Entrando al catálogo…" },
+    { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Ver catálogo" }
+  ],
+  "enabled_on": { "templates": ["index"] }
+}
+{% endschema %}

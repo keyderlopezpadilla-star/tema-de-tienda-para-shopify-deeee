@@ -6,7 +6,7 @@
   <div class="container z-1">
     <div class="footer__top">
       <div class="footer__brand stack" style="--stack:1.25rem" {% if settings.scroll_reveal %}data-reveal{% endif %}>
-        <a href="{{ routes.root_url }}" class="header__logo" style="font-size:1.5rem">
+        <a href="{{ settings.brand_home_url | default: routes.root_url }}" class="header__logo" style="font-size:1.5rem">
           {%- if settings.logo != blank -%}
             <img src="{{ settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}" width="{{ settings.logo.width }}" height="{{ settings.logo.height }}" style="width:140px;height:auto">
           {%- else -%}

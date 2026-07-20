@@ -38,7 +38,7 @@
 
     {%- paginate collection.products by s.products_per_page -%}
     {%- if collection.products.size > 0 -%}
-      <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid data-scroll-3d style="margin-top:1.5rem">
+      <div class="product-grid product-grid--{{ s.columns }}" data-facets-grid style="margin-top:1.5rem">
         {%- for product in collection.products -%}
           {% render 'product-card', product: product, reveal: false, tilt: true, image_ratio: s.image_ratio %}
         {%- endfor -%}

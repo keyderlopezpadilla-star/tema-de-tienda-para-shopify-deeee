@@ -1313,3 +1313,165 @@
     transform: none !important;
   }
 }
+
+
+/* ==========================================================================
+   v1.2 — Catalog reliability + Apple / Awwwards refinements
+   ========================================================================== */
+
+/* Reliable, never-stuck entrance for catalog & search grids.
+   Fixed-duration CSS animation with fill:both -> cards ALWAYS end visible,
+   even after AJAX filter / load-more (no ScrollTrigger dependency). */
+@keyframes grid-card-in {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+[data-facets-grid] > *,
+[data-facets-grid] > *.grid-card--in {
+  animation: grid-card-in 0.55s var(--ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-facets-grid] > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+/* Nicer AJAX busy state: dim + soft shimmer instead of hard blur */
+[data-facets-container][aria-busy='true'] [data-facets-grid] {
+  opacity: 0.5;
+  transition: opacity 0.25s var(--ease-out);
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Typography — editorial, tight, refined                                     */
+/* -------------------------------------------------------------------------- */
+:where(h1, h2, h3, h4) {
+  letter-spacing: -0.032em;
+}
+.display {
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+}
+body {
+  letter-spacing: -0.006em;
+}
+.lead {
+  line-height: 1.55;
+}
+.eyebrow {
+  opacity: 0.9;
+}
+
+/* More generous, editorial rhythm */
+.section {
+  padding-block: clamp(4rem, 9vw, 9rem);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Product card — clean, premium, restrained                                  */
+/* -------------------------------------------------------------------------- */
+.product-card__media {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  transition: box-shadow 0.55s var(--ease-out);
+}
+
+.product-card:hover .product-card__media {
+  box-shadow: 0 34px 60px -34px rgba(0, 0, 0, 0.75);
+}
+
+.product-card__info {
+  padding: 1.1rem 0.15rem 0;
+  gap: 0.3rem;
+}
+
+.product-card__title {
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  color: var(--color-text);
+}
+
+.product-card__title a {
+  transition: color 0.3s var(--ease-out);
+}
+
+.product-card:hover .product-card__title a {
+  color: var(--color-neon-cyan);
+}
+
+.price {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Calmer neon glow — barely-there at rest, elegant on hover */
+.product-card.glow-ring::before {
+  opacity: 0;
+}
+.product-card.glow-ring:hover::before {
+  opacity: 0.45;
+}
+
+/* Quick-add: cleaner glass pill */
+.product-card__quick .btn {
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  letter-spacing: -0.01em;
+}
+
+/* Badges: quieter, more refined */
+.product-card__badges .badge {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Catalog grid — generous whitespace                                         */
+/* -------------------------------------------------------------------------- */
+.product-grid {
+  gap: clamp(1.5rem, 3vw, 3rem) clamp(1rem, 2vw, 1.75rem);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Collection hero — editorial banner                                         */
+/* -------------------------------------------------------------------------- */
+.collection-hero {
+  padding: clamp(2.5rem, 6vw, 5rem);
+  border-radius: var(--radius-xl);
+}
+
+.collection-hero .display {
+  margin-block: 0.4rem 0.2rem;
+}
+
+.collection-hero__breadcrumb {
+  letter-spacing: 0.02em;
+}
+
+.collection-hero__count {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-line-strong);
+  color: var(--color-text);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Buttons — tighter type                                                     */
+/* -------------------------------------------------------------------------- */
+.btn {
+  letter-spacing: -0.01em;
+}
+
+.btn--lg {
+  padding: 1.15rem 2.1rem;
+}
+
+/* Load more: centered, breathing room */
+[data-load-more] {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}

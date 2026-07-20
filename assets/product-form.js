@@ -43,17 +43,22 @@
       return selected;
     }
 
-    function findVariant(options) {
-      return product.variants.find((v) =>
-        v.options.every((opt, i) => opt === options[i])
+    function findVariant() {
+      // Products without real options (only "Default Title") have no selectors:
+      // return the single variant instead of failing the match.
+      if (!optionInputs.length) return product.variants[0];
+      const options = currentOptions();
+      if (!options.length) return product.variants[0];
+      return product.variants.find(
+        (v) => v.options.length === options.length && v.options.every((opt, i) => opt === options[i])
       );
     }
 
     function updateVariant() {
-      const options = currentOptions();
-      const variant = findVariant(options);
+      const variant = findVariant();
 
       if (!variant) {
+        // A genuinely invalid option combination.
         if (submit) {
           submit.setAttribute('aria-disabled', 'true');
           if (submitLabel) submitLabel.textContent = strings.unavailable || 'No disponible';

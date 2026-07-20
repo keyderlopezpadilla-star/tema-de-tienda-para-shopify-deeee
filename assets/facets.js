@@ -1,6 +1,7 @@
 /* ==========================================================================
-   DEEE TODO — Collection facets (AJAX filtering / sorting) + infinite scroll
-   Uses Section Rendering API to update the grid without a full reload.
+   DEEE TODO — Collection facets (AJAX filtering / sorting) + load more
+   Uses the Section Rendering API to update the grid without a full reload.
+   Robust: delegated events, re-bound pager, and cards always end visible.
    ========================================================================== */
 (function () {
   'use strict';
@@ -14,29 +15,39 @@
   const form = qs('[data-facets-form]', container);
   const gridTarget = () => qs('[data-facets-grid]', container);
   const infinite = container.dataset.infinite === 'true';
+  let io;
+  let loading = false;
 
   async function fetchAndRender(url, { append = false } = {}) {
+    if (loading) return;
+    loading = true;
     container.setAttribute('aria-busy', 'true');
+
     const fetchUrl = new URL(url, window.location.origin);
     fetchUrl.searchParams.set('section_id', sectionId);
+
     try {
       const res = await fetch(fetchUrl.toString());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const text = await res.text();
       const doc = new DOMParser().parseFromString(text, 'text/html');
       const newContainer = doc.querySelector('[data-facets-container]');
-      if (!newContainer) return;
+      if (!newContainer) throw new Error('No section content');
 
       if (append) {
-        const newItems = newContainer.querySelector('[data-facets-grid]');
+        const newGrid = newContainer.querySelector('[data-facets-grid]');
         const target = gridTarget();
-        if (newItems && target) {
-          Array.from(newItems.children).forEach((c) => target.appendChild(c));
+        if (newGrid && target) {
+          // Move the new cards in; CSS gives them a guaranteed entrance.
+          Array.from(newGrid.children).forEach((card) => {
+            card.classList.add('grid-card--in');
+            target.appendChild(card);
+          });
         }
         const newPager = newContainer.querySelector('[data-load-more]');
         const oldPager = qs('[data-load-more]', container);
         if (oldPager) oldPager.replaceWith(newPager || document.createComment('end'));
       } else {
-        // Replace grid + facets + toolbar, keep scroll position sensible.
         ['[data-facets-grid]', '[data-facets-filters]', '[data-facets-toolbar]', '[data-facets-count]'].forEach(
           (sel) => {
             const fresh = newContainer.querySelector(sel);
@@ -44,28 +55,37 @@
             if (fresh && current) current.replaceWith(fresh);
           }
         );
-        bindPager();
+        const grid = gridTarget();
+        if (grid) Array.from(grid.children).forEach((c) => c.classList.add('grid-card--in'));
       }
-      window.history.pushState({}, '', url.replace(`section_id=${sectionId}`, '').replace(/[?&]$/, ''));
-      window.DEEE.bus.emit('facets:updated');
+
+      // Update the address bar (strip the section_id helper param).
+      const clean = new URL(url, window.location.origin);
+      clean.searchParams.delete('section_id');
+      window.history.pushState({}, '', clean.pathname + clean.search);
+
+      bindPager();
+      if (window.DEEE.bus) window.DEEE.bus.emit('facets:updated');
+    } catch (err) {
+      // Fallback: never leave the user stuck — go to the real URL.
+      window.location.href = url;
     } finally {
+      loading = false;
       container.setAttribute('aria-busy', 'false');
     }
   }
 
   function currentUrl() {
     const params = new URLSearchParams(new FormData(form));
-    // Clean empty values.
     const clean = new URLSearchParams();
     for (const [k, v] of params.entries()) if (v) clean.append(k, v);
-    const base = window.location.pathname;
     const query = clean.toString();
-    return query ? `${base}?${query}` : base;
+    return query ? `${window.location.pathname}?${query}` : window.location.pathname;
   }
 
-  // Filter + sort changes.
+  /* Filter + sort changes */
   if (form) {
-    const submit = debounce(() => fetchAndRender(currentUrl()), 350);
+    const submit = debounce(() => fetchAndRender(currentUrl()), 300);
     on(form, 'input', submit);
     on(form, 'change', submit);
     on(form, 'submit', (e) => {
@@ -74,7 +94,7 @@
     });
   }
 
-  // Delegated: remove active facet, sort dropdown, clear all, panel toggle.
+  /* Delegated interactions: panel toggle, active-facet links, load more */
   on(container, 'click', (e) => {
     const toggle = e.target.closest('[data-facets-open]');
     if (toggle) {
@@ -84,41 +104,45 @@
       if (panel) panel.style.display = open ? 'none' : 'grid';
       return;
     }
+
+    const loadMore = e.target.closest('[data-load-more-btn]');
+    if (loadMore) {
+      e.preventDefault();
+      const pager = loadMore.closest('[data-load-more]');
+      if (pager && pager.dataset.nextUrl) fetchAndRender(pager.dataset.nextUrl, { append: true });
+      return;
+    }
+
     const link = e.target.closest('[data-facet-link]');
     if (link) {
       e.preventDefault();
-      fetchAndRender(link.href);
+      fetchAndRender(link.getAttribute('href'));
     }
   });
 
-  // Filter panel starts collapsed on load (revealed via toggle).
+  /* Collapse filter panel on mobile initially */
   (function collapseInitial() {
     const panel = qs('[data-facets-filters]', container);
     if (panel && window.matchMedia('(max-width: 749px)').matches) panel.style.display = 'none';
   })();
 
-  // Load more / infinite scroll.
-  let io;
+  /* Infinite scroll observer (button always works via delegation above) */
   function bindPager() {
+    if (io) io.disconnect();
+    if (!infinite || !('IntersectionObserver' in window)) return;
     const pager = qs('[data-load-more]', container);
-    if (!pager) return;
-    const btn = qs('[data-load-more-btn]', pager);
-    const nextUrl = pager.dataset.nextUrl;
-    if (!nextUrl) return;
-
-    const load = () => fetchAndRender(nextUrl, { append: true });
-    if (btn) on(btn, 'click', load);
-
-    if (infinite && 'IntersectionObserver' in window) {
-      if (io) io.disconnect();
-      io = new IntersectionObserver(
-        (entries) => entries.forEach((en) => en.isIntersecting && load()),
-        { rootMargin: '600px 0px' }
-      );
-      io.observe(pager);
-    }
+    if (!pager || !pager.dataset.nextUrl) return;
+    io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting && !loading) fetchAndRender(pager.dataset.nextUrl, { append: true });
+        });
+      },
+      { rootMargin: '700px 0px' }
+    );
+    io.observe(pager);
   }
 
   bindPager();
-  on(window, 'popstate', () => fetchAndRender(window.location.href));
+  on(window, 'popstate', () => window.location.reload());
 })();

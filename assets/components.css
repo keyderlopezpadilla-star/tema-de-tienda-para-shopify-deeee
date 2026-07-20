@@ -1475,3 +1475,61 @@ body {
   justify-content: center;
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
+
+
+/* ==========================================================================
+   Category navigation bar (catalog) — full-reload category switching
+   ========================================================================== */
+.category-nav {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line-strong);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: transform 0.3s var(--ease-out), color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out), background 0.3s var(--ease-out);
+}
+
+.category-chip:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-faint);
+  transform: translateY(-2px);
+}
+
+.category-chip.is-active {
+  color: #fff;
+  background: var(--gradient-brand);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow);
+}
+
+.category-chip .icon {
+  width: 1em;
+  height: 1em;
+}
+
+@media (max-width: 749px) {
+  .category-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--container-pad));
+    padding-inline: var(--container-pad);
+    scrollbar-width: none;
+  }
+  .category-nav::-webkit-scrollbar {
+    display: none;
+  }
+}

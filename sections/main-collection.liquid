@@ -4,7 +4,8 @@
   class="section"
   data-facets-container
   data-section-id="{{ section.id }}"
-  data-infinite="{{ s.enable_infinite_scroll }}"
+  data-ajax="{{ s.ajax_filtering }}"
+  data-infinite="{% if s.ajax_filtering and s.enable_infinite_scroll %}true{% else %}false{% endif %}"
   aria-busy="false"
 >
   <div class="container">
@@ -32,6 +33,25 @@
       {%- endif -%}
     </div>
 
+    {%- if s.show_category_nav -%}
+      <nav class="category-nav" aria-label="Categorías">
+        <a href="{{ routes.all_products_collection_url }}" class="category-chip {% if collection.handle == 'all' or collection.handle == blank %}is-active{% endif %}">
+          {% render 'icon', name: 'sparkles', class: 'icon' %} Todo
+        </a>
+        {%- if s.category_menu != blank and s.category_menu.links.size > 0 -%}
+          {%- for link in s.category_menu.links -%}
+            <a href="{{ link.url }}" class="category-chip {% if link.current %}is-active{% endif %}">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for c in collections -%}
+            {%- unless c.handle == 'all' or c.handle == 'frontpage' -%}
+              <a href="{{ c.url }}" class="category-chip {% if c.handle == collection.handle %}is-active{% endif %}">{{ c.title }}</a>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
     {%- if s.enable_filtering or s.enable_sorting -%}
       {% render 'facets', results: collection, enable_filtering: s.enable_filtering, enable_sorting: s.enable_sorting %}
     {%- endif -%}
@@ -44,17 +64,17 @@
         {%- endfor -%}
       </div>
 
-      {%- if paginate.next -%}
-        <div class="text-center" data-load-more data-next-url="{{ paginate.next.url }}" style="margin-top:2.5rem">
-          <button class="btn btn--ghost btn--lg" data-load-more-btn {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
-            <span class="btn__label">{{ 'general.pagination.load_more' | t }}</span>
-          </button>
-        </div>
-      {%- endif -%}
-
-      {%- unless s.enable_infinite_scroll -%}
+      {%- if s.ajax_filtering -%}
+        {%- if paginate.next -%}
+          <div class="text-center" data-load-more data-next-url="{{ paginate.next.url }}" style="margin-top:2.5rem">
+            <button class="btn btn--ghost btn--lg" data-load-more-btn {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+              <span class="btn__label">{{ 'general.pagination.load_more' | t }}</span>
+            </button>
+          </div>
+        {%- endif -%}
+      {%- else -%}
         {% render 'pagination', paginate: paginate %}
-      {%- endunless -%}
+      {%- endif -%}
     {%- else -%}
       <div class="cart-empty" data-facets-grid>
         <p class="h3">{{ 'sections.collection.empty' | t }}</p>
@@ -85,9 +105,14 @@
       "options": [ { "value": "portrait", "label": "Portrait" }, { "value": "square", "label": "Square" }, { "value": "landscape", "label": "Landscape" } ],
       "default": "portrait"
     },
-    { "type": "checkbox", "id": "enable_filtering", "label": "Enable filtering", "default": true },
-    { "type": "checkbox", "id": "enable_sorting", "label": "Enable sorting", "default": true },
-    { "type": "checkbox", "id": "enable_infinite_scroll", "label": "Infinite scroll", "default": false }
+    { "type": "header", "content": "Navegación por categorías" },
+    { "type": "checkbox", "id": "show_category_nav", "label": "Mostrar barra de categorías", "default": true },
+    { "type": "link_list", "id": "category_menu", "label": "Menú de categorías (opcional)", "info": "Si se deja vacío, se listan todas las colecciones de la tienda." },
+    { "type": "header", "content": "Filtrado" },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Activar filtros", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Activar orden", "default": true },
+    { "type": "checkbox", "id": "ajax_filtering", "label": "Filtrar sin recargar (AJAX)", "info": "Recomendado DESACTIVADO: recarga la pagina al filtrar y conserva las opciones en la URL. Mas fiable con imagenes por URL.", "default": false },
+    { "type": "checkbox", "id": "enable_infinite_scroll", "label": "Scroll infinito (solo con AJAX)", "default": false }
   ]
 }
 {% endschema %}

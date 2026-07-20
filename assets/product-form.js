@@ -43,28 +43,33 @@
       return selected;
     }
 
+    const norm = (v) => (v == null ? '' : String(v).trim());
+
     function findVariant() {
       // Products without real options (only "Default Title") have no selectors:
       // return the single variant instead of failing the match.
       if (!optionInputs.length) return product.variants[0];
-      const options = currentOptions();
+      const options = currentOptions().map(norm);
       if (!options.length) return product.variants[0];
+      // Tolerant match (trims whitespace from CSV-imported option values).
       return product.variants.find(
-        (v) => v.options.length === options.length && v.options.every((opt, i) => opt === options[i])
+        (v) => v.options.length === options.length && v.options.every((opt, i) => norm(opt) === options[i])
       );
     }
 
     function updateVariant() {
-      const variant = findVariant();
+      let variant = findVariant();
 
       if (!variant) {
-        // A genuinely invalid option combination.
-        if (submit) {
-          submit.setAttribute('aria-disabled', 'true');
-          if (submitLabel) submitLabel.textContent = strings.unavailable || 'No disponible';
-        }
-        return;
+        // Never falsely show "unavailable": fall back to the current variant in
+        // the form, else the first available one, else the first variant.
+        const currentId = idInput && idInput.value;
+        variant =
+          product.variants.find((v) => String(v.id) === String(currentId)) ||
+          product.variants.find((v) => v.available) ||
+          product.variants[0];
       }
+      if (!variant) return;
 
       if (idInput) idInput.value = variant.id;
 

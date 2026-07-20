@@ -5,7 +5,7 @@
 {%- liquid
   assign sort_by = results.sort_by | default: results.default_sort_by
 -%}
-<form data-facets-form>
+<form data-facets-form method="get">
   {%- comment -%} Preserve q/type for search results {%- endcomment -%}
   {%- if results.terms -%}
     <input type="hidden" name="q" value="{{ results.terms | escape }}">

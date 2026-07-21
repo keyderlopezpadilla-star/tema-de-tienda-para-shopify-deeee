@@ -228,6 +228,58 @@
   });
 
   /* --------------------------------------------------------------------- */
+  /* Smooth page transitions (soft reloads).                               */
+  /* Full page navigations (reliable images) but with a gentle fade-out    */
+  /* overlay on click; the new page fades in via CSS. Safe: if JS fails,   */
+  /* links navigate normally.                                              */
+  /* --------------------------------------------------------------------- */
+  if (!reduceMotion) {
+    const overlay = document.createElement('div');
+    overlay.className = 'page-transition';
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(overlay);
+
+    on(document, 'click', (e) => {
+      const a = e.target.closest('a[href]');
+      if (!a) return;
+      if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        e.altKey ||
+        a.target === '_blank' ||
+        a.hasAttribute('download') ||
+        a.dataset.noTransition !== undefined
+      ) {
+        return;
+      }
+      const href = a.getAttribute('href');
+      if (!href || href.charAt(0) === '#' || href.indexOf('mailto:') === 0 || href.indexOf('tel:') === 0) return;
+
+      let url;
+      try {
+        url = new URL(a.href, window.location.href);
+      } catch (err) {
+        return;
+      }
+      // Only same-origin internal navigations (external logo → deeetodo.com is left alone).
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname === window.location.pathname && url.search === window.location.search) return;
+
+      e.preventDefault();
+      overlay.classList.add('is-active');
+      setTimeout(() => {
+        window.location.href = a.href;
+      }, 260);
+    });
+
+    // Reset overlay when returning via the back/forward cache.
+    on(window, 'pageshow', () => overlay.classList.remove('is-active'));
+  }
+
+  /* --------------------------------------------------------------------- */
   /* Scroll reveal (base). Always available so content is never stuck       */
   /* hidden even when the GSAP motion layer is disabled.                    */
   /* --------------------------------------------------------------------- */

@@ -81,6 +81,27 @@
       </button>
     </div>
   </div>
+
+  {%- comment -%} Roly-style horizontal category bar — each links to its collection (full reload). {%- endcomment -%}
+  {%- if section.settings.show_category_bar -%}
+    {%- assign catmenu = section.settings.category_menu -%}
+    <nav class="category-bar" aria-label="Categorías">
+      <div class="category-bar__inner">
+        {%- if catmenu != blank and catmenu.links.size > 0 -%}
+          {%- for link in catmenu.links -%}
+            <a href="{{ link.url }}" class="category-bar__link {% if link.current or link.child_active %}is-active{% endif %}">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for c in collections -%}
+            {%- unless c.handle == 'all' or c.handle == 'frontpage' -%}
+              <a href="{{ c.url }}" class="category-bar__link {% if c.handle == collection.handle %}is-active{% endif %}">{{ c.title }}</a>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+        <a href="{{ routes.all_products_collection_url }}" class="category-bar__link category-bar__link--catalog {% if template.name == 'collection' and collection.handle == 'all' %}is-active{% endif %}">{{ section.settings.catalog_label | default: 'Catálogo' }}</a>
+      </div>
+    </nav>
+  {%- endif -%}
 </header>
 
 {%- comment -%} Mobile drawer menu {%- endcomment -%}
@@ -112,7 +133,11 @@
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
     { "type": "checkbox", "id": "show_search", "label": "Show search", "default": true },
     { "type": "checkbox", "id": "transparent_on_home", "label": "Transparent on homepage", "default": true },
-    { "type": "checkbox", "id": "hide_on_scroll", "label": "Hide header on scroll down", "default": true }
+    { "type": "checkbox", "id": "hide_on_scroll", "label": "Hide header on scroll down", "default": true },
+    { "type": "header", "content": "Barra de categorías (estilo Roly)" },
+    { "type": "checkbox", "id": "show_category_bar", "label": "Mostrar barra de categorías", "default": true },
+    { "type": "link_list", "id": "category_menu", "label": "Menú de categorías", "info": "Crea un menú con tus colecciones y selecciónalo aquí. Si se deja vacío, se listan todas las colecciones de la tienda." },
+    { "type": "text", "id": "catalog_label", "label": "Texto del enlace Catálogo", "default": "Catálogo" }
   ]
 }
 {% endschema %}

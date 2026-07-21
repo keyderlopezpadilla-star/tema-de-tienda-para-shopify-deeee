@@ -1533,3 +1533,105 @@ body {
     display: none;
   }
 }
+
+
+/* ==========================================================================
+   v1.3 — Roly-style header category bar + smooth page transitions
+   ========================================================================== */
+
+/* Dark backdrop behind the page during the fade-in (no white flash) */
+html {
+  background-color: var(--color-bg);
+}
+
+/* Header category bar */
+.category-bar {
+  border-top: 1px solid var(--color-line);
+  background: rgba(var(--color-bg-rgb), 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.category-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.1rem);
+  max-width: 90rem;
+  margin-inline: auto;
+  padding: 0.7rem var(--container-pad);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.category-bar__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.category-bar__link {
+  position: relative;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  padding-block: 0.2rem;
+  transition: color 0.25s var(--ease-out);
+}
+
+.category-bar__link:hover,
+.category-bar__link.is-active {
+  color: var(--color-text);
+}
+
+.category-bar__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.category-bar__link:hover::after,
+.category-bar__link.is-active::after {
+  transform: scaleX(1);
+}
+
+.category-bar__link--catalog {
+  margin-left: auto;
+  color: var(--color-brand-soft);
+  font-weight: 600;
+}
+
+/* Smooth page transitions */
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.js body {
+  animation: page-in 0.42s var(--ease-out) both;
+}
+
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--color-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s var(--ease-out);
+}
+
+.page-transition.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js body { animation: none; }
+  .page-transition { display: none; }
+}

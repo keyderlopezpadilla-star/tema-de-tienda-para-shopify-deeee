@@ -64,17 +64,15 @@
         {%- endfor -%}
       </div>
 
-      {%- if s.ajax_filtering -%}
-        {%- if paginate.next -%}
-          <div class="text-center" data-load-more data-next-url="{{ paginate.next.url }}" style="margin-top:2.5rem">
-            <button class="btn btn--ghost btn--lg" data-load-more-btn {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
-              <span class="btn__label">{{ 'general.pagination.load_more' | t }}</span>
-            </button>
-          </div>
-        {%- endif -%}
-      {%- else -%}
-        {% render 'pagination', paginate: paginate %}
+      {%- comment -%} "Cargar más" is a full-reload link to the next page so images always refresh. {%- endcomment -%}
+      {%- if paginate.next -%}
+        <div class="text-center" style="margin-top:clamp(2.5rem,5vw,4rem)">
+          <a href="{{ paginate.next.url }}" class="btn btn--ghost btn--lg" rel="next" {% if settings.magnetic_buttons %}data-magnetic{% endif %}>
+            <span class="btn__label">{{ 'general.pagination.load_more' | t }}</span>
+          </a>
+        </div>
       {%- endif -%}
+      {% render 'pagination', paginate: paginate %}
     {%- else -%}
       <div class="cart-empty" data-facets-grid>
         <p class="h3">{{ 'sections.collection.empty' | t }}</p>

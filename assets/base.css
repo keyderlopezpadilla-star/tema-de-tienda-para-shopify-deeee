@@ -681,13 +681,23 @@ svg {
   object-fit: cover;
 }
 
+/* Reliable image fade-in: CSS animation (fill:both) always completes, so
+   images ALWAYS end visible — including AJAX/appended ones — no JS needed. */
+@keyframes media-img-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .media--fade img {
-  opacity: 0;
-  transition: opacity 0.6s var(--ease-out);
+  animation: media-img-in 0.5s var(--ease-out) both;
 }
 
 .media img.is-loaded {
   opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media--fade img { animation: none; }
 }
 
 .ratio-square { aspect-ratio: 1 / 1; }
